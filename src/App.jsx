@@ -18,9 +18,9 @@ function App() {
 
   return (
     <>
-    {/* <Header/>
+    <Header/>
     <Hero/>
-    <Footer/> */}
+    <Footer/>
 
 
     {/* <Header/>
@@ -35,8 +35,8 @@ function App() {
     {/* <Header/>
     <DonorRegistration/> */}
 
-    <Header/>
-    <RecieverRegistration/>
+    {/* <Header/>
+    <RecieverRegistration/> */}
     </>
   )
 }

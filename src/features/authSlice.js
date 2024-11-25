@@ -12,48 +12,31 @@ export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI
     const response = await axios.post(`${API_URL}/auth/login`, credentials);
     return response.data;
   } catch (error) {
-    return thunkAPI.rejectWithValue(error.response.data);
+    return thunkAPI.rejectWithValue(error.response?.data || "An error occurred");
   }
 });
 
-// Register as Hospital
-export const registerHospital = createAsyncThunk('auth/registerHospital', async (hospitalData, thunkAPI) => {
-  try {
-    const response = await axios.post(`${API_URL}/auth/register-hospital`, hospitalData);
-    return response.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.response.data);
+// Register
+export const register = createAsyncThunk(
+  'auth/register',
+  async (registrationData, thunkAPI) => {
+    try {
+      const response = await axios.post(`${API_URL}/auth/register`, registrationData);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data || "An error occurred");
+    }
   }
-});
-
-// Register as Donor
-export const registerDonor = createAsyncThunk('auth/registerDonor', async (donorData, thunkAPI) => {
-  try {
-    const response = await axios.post(`${API_URL}/auth/register-donor`, donorData);
-    return response.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.response.data);
-  }
-});
-
-// Register as Receiver
-export const registerReceiver = createAsyncThunk('auth/registerReceiver', async (receiverData, thunkAPI) => {
-  try {
-    const response = await axios.post(`${API_URL}/auth/register-receiver`, receiverData);
-    return response.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.response.data);
-  }
-});
+);
 
 // Auth slice
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    user: null, // User info
+    user: null, // User data
     isLoading: false, // Loading state
     error: null, // Error message
-    success: false, // Success state for feedback
+    success: false, // Success flag for feedback
   },
   reducers: {
     clearState: (state) => {
@@ -73,7 +56,7 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload;
+        state.user = action.payload; // Save user data
         state.success = true;
       })
       .addCase(login.rejected, (state, action) => {
@@ -82,49 +65,18 @@ const authSlice = createSlice({
         state.success = false;
       })
 
-      // Register as Hospital
-      .addCase(registerHospital.pending, (state) => {
+      // Register
+      .addCase(register.pending, (state) => {
         state.isLoading = true;
         state.error = null;
         state.success = false;
       })
-      .addCase(registerHospital.fulfilled, (state, action) => {
+      .addCase(register.fulfilled, (state, action) => {
         state.isLoading = false;
+        state.user = action.payload; // Save user data after registration
         state.success = true;
       })
-      .addCase(registerHospital.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload;
-        state.success = false;
-      })
-
-      // Register as Donor
-      .addCase(registerDonor.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-        state.success = false;
-      })
-      .addCase(registerDonor.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.success = true;
-      })
-      .addCase(registerDonor.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload;
-        state.success = false;
-      })
-
-      // Register as Receiver
-      .addCase(registerReceiver.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-        state.success = false;
-      })
-      .addCase(registerReceiver.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.success = true;
-      })
-      .addCase(registerReceiver.rejected, (state, action) => {
+      .addCase(register.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
         state.success = false;

@@ -6,37 +6,41 @@ import Header from "./components/header/header"
 
 import Login from "./components/login/login"
 
+import SignUpPage from "./components/register/register"
+
 import RegisterOptions from "./components/register_as/registeras"
 
-import HospitalRegistration from "./components/register-as-hospital/registerah"
+import HospitalRegistration from "./components/hospital-form/hform"
 
-import DonorRegistration from "./components/register-as-donor/registerad"
+import DonorRegistration from "./components/DR-form/drform"
 
-import RecieverRegistration from "./components/register-as-reciever/registerar"
+import UserHeader from "./userdashboard/components/header/userheader"
 
 function App() {
 
   return (
-    <>
-    <Header/>
+     <>
+    {/* <Header/>
     <Hero/>
-    <Footer/>
+    <Footer/> */}
 
 
     {/* <Header/>
     <Login/> */}
 
     {/* <Header/>
-    <RegisterOptions/> */}
+    <RegisterOptions/>  */}
+
+
+    {/* <Header/>
+    <SignUpPage/> */}
 
     {/* <Header/>
     <HospitalRegistration/> */}
 
-    {/* <Header/>
-    <DonorRegistration/> */}
+    <UserHeader/>
+    <DonorRegistration/>
 
-    {/* <Header/>
-    <RecieverRegistration/> */}
     </>
   )
 }

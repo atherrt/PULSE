@@ -16,18 +16,11 @@ const RegisterOptions = () => {
         {/* Register as Donor */}
         <button
           className="w-full bg-red-700 text-white py-4 rounded-md text-lg font-semibold hover:bg-red-800 transition duration-150"
-          onClick={() => alert("Register as a Donor")}
+          onClick={() => alert("Register as a Donor / Reciever")}
         >
-          Register as a Donor
+          Register as a Donor / Reciever
         </button>
 
-        {/* Register as Receiver */}
-        <button
-          className="w-full bg-red-700 text-white py-4 rounded-md text-lg font-semibold hover:bg-red-800 transition duration-150"
-          onClick={() => alert("Register as a Receiver")}
-        >
-          Register as a Receiver
-        </button>
       </div>
     </div>
   );

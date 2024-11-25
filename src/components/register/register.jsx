@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+
 const SignUpPage = () => {
   const [step, setStep] = useState(1); // Tracks the current step
   const [formData, setFormData] = useState({

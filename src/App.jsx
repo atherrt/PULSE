@@ -1,28 +1,21 @@
 import Hero from "./components/hero_page/hero"
-
 import Footer from "./components/footer/footer"
-
 import Header from "./components/header/header"
-
 import Login from "./components/login/login"
-
 import SignUpPage from "./components/register/register"
-
 import RegisterOptions from "./components/register_as/registeras"
-
 import HospitalRegistration from "./components/hospital-form/hform"
-
 import DonorRegistration from "./components/DR-form/drform"
-
 import UserHeader from "./userdashboard/components/header/userheader"
+import AppLayout from "./layouts/al1"
 
 function App() {
 
   return (
      <>
-    {/* <Header/>
+    <AppLayout>
     <Hero/>
-    <Footer/> */}
+     </AppLayout>
 
 
     {/* <Header/>
@@ -38,8 +31,8 @@ function App() {
     {/* <Header/>
     <HospitalRegistration/> */}
 
-    <UserHeader/>
-    <DonorRegistration/>
+    {/* <UserHeader/>
+    <DonorRegistration/> */}
 
     </>
   )

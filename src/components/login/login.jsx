@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../redux/authSlice"; // Adjust the path based on your project structure
+import { login } from "../../features/authSlice"; // Adjust the path based on your project structure
 
 const Login = () => {
   const dispatch = useDispatch();

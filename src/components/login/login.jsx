@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../../features/authSlice"; // Adjust the path based on your project structure
+import { Link, useNavigate } from "react-router-dom"; // Added `useNavigate` for redirection
+import { login, clearState } from "../../features/authSlice"; // Adjust the path based on your project structure
 
 const Login = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate(); // For navigating after successful login
   const { isLoading, error, success } = useSelector((state) => state.auth);
 
   const [email, setEmail] = useState("");
@@ -11,8 +13,16 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    dispatch(login({ email, password }));
+    dispatch(login({ email, password })); // Dispatch the login action
   };
+
+  // Reset state and navigate on successful login
+  useEffect(() => {
+    if (success) {
+      navigate("/dashboard"); // Replace with the actual route after login
+      dispatch(clearState()); // Clear success and error states
+    }
+  }, [success, dispatch, navigate]);
 
   return (
     <div className="bg-red-100 min-h-screen flex flex-col">
@@ -23,15 +33,10 @@ const Login = () => {
             Sign In
           </h2>
 
+          {/* Error message */}
           {error && (
             <div className="bg-red-200 text-red-800 text-sm p-2 rounded mb-4">
               {error}
-            </div>
-          )}
-
-          {success && (
-            <div className="bg-green-200 text-green-800 text-sm p-2 rounded mb-4">
-              Login successful!
             </div>
           )}
 
@@ -80,12 +85,22 @@ const Login = () => {
           </form>
 
           <div className="mt-4 text-center">
-            <a
-              href="#forgot-password"
+            <Link
+              to="/forgot-password" // Replace with the actual route for forgot password
               className="text-sm text-gray-600 hover:text-red-500"
             >
               Forgot password?
-            </a>
+            </Link>
+          </div>
+
+          <div className="mt-6 text-center text-sm text-gray-600">
+            Don't have an account?{" "}
+            <Link
+              to="/signup" // Replace with the actual route for sign up
+              className="text-red-500 hover:text-red-700 font-medium"
+            >
+              Sign up
+            </Link>
           </div>
         </div>
       </main>

@@ -1,9 +1,38 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { selectHospitalInfo } from "../../features/hospitalinfoSlice";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchHospitalInfo, selectHospitalInfo } from "../../features/hospitalinfoSlice";
 
 const HospitalInfo = () => {
-  const hospitalInfo = useSelector(selectHospitalInfo);
+  const dispatch = useDispatch();
+  const { data: hospitalInfo, loading, error } = useSelector(selectHospitalInfo);
+
+  useEffect(() => {
+    dispatch(fetchHospitalInfo());
+  }, [dispatch]);
+
+  if (loading) {
+    return (
+      <div className="bg-white min-h-screen flex items-center justify-center py-10">
+        <p className="text-red-800 font-bold">Loading hospital information...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-white min-h-screen flex items-center justify-center py-10">
+        <p className="text-red-800 font-bold">Error: {error}</p>
+      </div>
+    );
+  }
+
+  if (!hospitalInfo) {
+    return (
+      <div className="bg-white min-h-screen flex items-center justify-center py-10">
+        <p className="text-red-800 font-bold">No hospital information available.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white min-h-screen flex items-center justify-center py-10">
@@ -16,7 +45,7 @@ const HospitalInfo = () => {
               <span className="font-semibold">Name:</span> {hospitalInfo.name}
             </p>
             <p>
-              <span className="font-semibold">Joined Since:</span> {hospitalInfo.joinedSince}
+              <span className="font-semibold">Joined Since:</span> {hospitalInfo.joinedsince}
             </p>
             <p>
               <span className="font-semibold">License Number:</span> {hospitalInfo.licenseNumber}

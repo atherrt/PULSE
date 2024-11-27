@@ -18,7 +18,7 @@ function App() {
   return (
    <>
    <HospitalHeader/>
-   <EditProfile/>
+   <HospitalInfo/>
    </>
     // <Router>
     //   <AppLayout>

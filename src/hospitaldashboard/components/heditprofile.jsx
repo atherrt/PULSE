@@ -1,108 +1,179 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchHospitalData, updateHospitalData } from "../../features/heditSlice";
 
-const EditProfile = () => {
+const HospitalEditProfile = () => {
+  const dispatch = useDispatch();
+  const { hospitalData, loading } = useSelector((state) => state.hedit);
+
+  const [formData, setFormData] = useState({
+    ownerName: "",
+    hospitalName: "",
+    phoneNumber: "",
+    hospitalType: "",
+    email: "",
+    licenseNumber: "",
+    emergencyContact: "",
+    websiteURL: "",
+    address: "",
+    licenseExpiryDate: "",
+  });
+
+  // Fetch hospital data on component mount
+  useEffect(() => {
+    dispatch(fetchHospitalData());
+  }, [dispatch]);
+
+  // Sync Redux state to form state
+  useEffect(() => {
+    if (hospitalData) {
+      setFormData(hospitalData);
+    }
+  }, [hospitalData]);
+
+  // Handle form input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(updateHospitalData(formData));
+  };
+
+  if (loading) return <div className="text-center mt-10">Loading...</div>;
+
   return (
-    <div className="bg-red-200 min-h-screen py-10 px-8 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl">
-        <h2 className="text-center text-3xl font-bold text-red-800 mb-6">Edit Profile</h2>
-        
-        <form className="space-y-6">
-          {/* Row 1 */}
+    <div className="bg-gray-100 min-h-screen flex items-center justify-center py-10 px-6">
+      <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-4xl">
+        <h2 className="text-center text-2xl font-bold text-gray-700 mb-8">
+          Edit Hospital Profile
+        </h2>
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/** Owner Name */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700">Owner Name</label>
+              <label className="block text-sm font-medium text-gray-700">Owner Name</label>
               <input
                 type="text"
-                className="mt-2 p-3 border border-gray-300 rounded-lg w-full"
-                placeholder="Value"
+                name="ownerName"
+                value={formData.ownerName}
+                onChange={handleChange}
+                className="mt-2 w-full p-2 border border-gray-300 rounded-lg"
               />
             </div>
+            {/** Hospital Name */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700">Hospital Name</label>
+              <label className="block text-sm font-medium text-gray-700">Hospital Name</label>
               <input
                 type="text"
-                className="mt-2 p-3 border border-gray-300 rounded-lg w-full"
-                placeholder="Value"
+                name="hospitalName"
+                value={formData.hospitalName}
+                onChange={handleChange}
+                className="mt-2 w-full p-2 border border-gray-300 rounded-lg"
               />
             </div>
+            {/** Phone Number */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700">Phone Number</label>
+              <label className="block text-sm font-medium text-gray-700">Phone Number</label>
               <input
                 type="text"
-                className="mt-2 p-3 border border-gray-300 rounded-lg w-full"
-                placeholder="Value"
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                className="mt-2 w-full p-2 border border-gray-300 rounded-lg"
               />
             </div>
+            {/** Hospital Type */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700">Hospital Type</label>
+              <label className="block text-sm font-medium text-gray-700">Hospital Type</label>
               <select
-                className="mt-2 p-3 border border-gray-300 rounded-lg w-full"
+                name="hospitalType"
+                value={formData.hospitalType}
+                onChange={handleChange}
+                className="mt-2 w-full p-2 border border-gray-300 rounded-lg"
               >
-                <option>Drop down</option>
-                {/* Add more options if necessary */}
+                <option value="Private">Private</option>
+                <option value="Public">Public</option>
               </select>
             </div>
+            {/** Email */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700">Email</label>
-              <select
-                className="mt-2 p-3 border border-gray-300 rounded-lg w-full"
-              >
-                <option>Drop down</option>
-                {/* Add more options if necessary */}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700">License Number</label>
-              <select
-                className="mt-2 p-3 border border-gray-300 rounded-lg w-full"
-              >
-                <option>Drop down</option>
-                {/* Add more options if necessary */}
-              </select>
-            </div>
-          </div>
-
-          {/* Row 2 */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700">Emergency Contact</label>
-              <select
-                className="mt-2 p-3 border border-gray-300 rounded-lg w-full"
-              >
-                <option>Drop down</option>
-                {/* Add more options if necessary */}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700">Website URL</label>
+              <label className="block text-sm font-medium text-gray-700">Email</label>
               <input
-                type="text"
-                className="mt-2 p-3 border border-gray-300 rounded-lg w-full"
-                placeholder="Value"
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="mt-2 w-full p-2 border border-gray-300 rounded-lg"
               />
             </div>
+            {/** License Number */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700">Address</label>
+              <label className="block text-sm font-medium text-gray-700">License Number</label>
               <input
                 type="text"
-                className="mt-2 p-3 border border-gray-300 rounded-lg w-full"
-                placeholder="Value"
+                name="licenseNumber"
+                value={formData.licenseNumber}
+                onChange={handleChange}
+                className="mt-2 w-full p-2 border border-gray-300 rounded-lg"
               />
             </div>
+            {/** Emergency Contact */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700">License Expiry Date</label>
+              <label className="block text-sm font-medium text-gray-700">Emergency Contact</label>
+              <input
+                type="text"
+                name="emergencyContact"
+                value={formData.emergencyContact}
+                onChange={handleChange}
+                className="mt-2 w-full p-2 border border-gray-300 rounded-lg"
+              />
+            </div>
+            {/** Website URL */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Website URL</label>
+              <input
+                type="text"
+                name="websiteURL"
+                value={formData.websiteURL}
+                onChange={handleChange}
+                className="mt-2 w-full p-2 border border-gray-300 rounded-lg"
+              />
+            </div>
+            {/** Address */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Address</label>
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                className="mt-2 w-full p-2 border border-gray-300 rounded-lg"
+              />
+            </div>
+            {/** License Expiry Date */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">License Expiry Date</label>
               <input
                 type="date"
-                className="mt-2 p-3 border border-gray-300 rounded-lg w-full"
-                placeholder="Value"
+                name="licenseExpiryDate"
+                value={formData.licenseExpiryDate}
+                onChange={handleChange}
+                className="mt-2 w-full p-2 border border-gray-300 rounded-lg"
               />
             </div>
           </div>
 
-          {/* Save Button */}
-          <div className="flex justify-center">
-            <button className="bg-red-700 text-white py-3 px-6 rounded-lg shadow-md hover:bg-red-800 mt-6">
-              Save
+          {/** Save Button */}
+          <div className="flex justify-center mt-8">
+            <button
+              type="submit"
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
+            >
+              Save Changes
             </button>
           </div>
         </form>
@@ -111,4 +182,4 @@ const EditProfile = () => {
   );
 };
 
-export default EditProfile;
+export default HospitalEditProfile;

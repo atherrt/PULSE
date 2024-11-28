@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 // Base API URL (replace with your backend endpoint)
-const API_URL = 'https://245d-103-207-87-227.ngrok-free.app/api/auth';
+const API_URL = 'https://6dbc-2402-e000-440-9fef-4931-896e-4293-1269.ngrok-free.app/swagger/index.html';
 
 // Async thunks for API calls
 

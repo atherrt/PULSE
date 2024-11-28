@@ -12,13 +12,15 @@ import AppLayout from "./layouts/al1";
 
 import HospitalInfo from "./hospitaldashboard/components/hospitalhomepage";
 import HospitalHeader from "./hospitaldashboard/components/hospitalheader";
-import EditProfile from "./hospitaldashboard/components/heditprofile.jsx";
+import HospitalEditProfile from "./hospitaldashboard/components/heditprofile.jsx";
 
 function App() {
   return (
    <>
    <HospitalHeader/>
-   <HospitalInfo/>
+   <HospitalEditProfile/>
+
+
    </>
     // <Router>
     //   <AppLayout>

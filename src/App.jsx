@@ -16,24 +16,19 @@ import HospitalEditProfile from "./hospitaldashboard/components/heditprofile.jsx
 
 function App() {
   return (
-   <>
-   <HospitalHeader/>
-   <HospitalEditProfile/>
-
-
-   </>
-    // <Router>
-    //   <AppLayout>
-    //     <Routes>
-    //       <Route path="/" element={<Hero />} />
-    //       <Route path="/login" element={<Login />} />
-    //       <Route path="/signup" element={<SignUpPage />} />
-    //       {/* <Route path="/register-options" element={<RegisterOptions />} /> */}
-    //       <Route path="/hospital-registration" element={<HospitalRegistration />} />
-    //       <Route path="/donor-registration" element={<DonorRegistration />} />
-    //     </Routes>
-    //   </AppLayout>
-    // </Router>
+   
+    <Router>
+       <AppLayout>
+         <Routes>
+           <Route path="/" element={<Hero />} />
+           <Route path="/login" element={<Login />} />
+           <Route path="/signup" element={<SignUpPage />} />
+           {/* <Route path="/register-options" element={<RegisterOptions />} /> */}
+           <Route path="/hospital-registration" element={<HospitalRegistration />} />
+           <Route path="/donor-registration" element={<DonorRegistration />} />
+         </Routes>
+       </AppLayout>
+    </Router>
   );
 }
 

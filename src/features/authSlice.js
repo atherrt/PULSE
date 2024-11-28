@@ -1,33 +1,41 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// Base API URL (replace with your backend endpoint)
-const API_URL = 'https://245d-103-207-87-227.ngrok-free.app/api/auth';
+const API_URL = 'http://localhost:8080/api/auth';
 
-// Async thunks for API calls
-
-// Login
-export const login = createAsyncThunk('/login', async (credentials, thunkAPI) => {
+// Login action
+export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI) => {
   try {
-    const response = await axios.post(`${API_URL}/login`, credentials); // Corrected URL
-    return response.data;
+    const response = await axios.post(`${API_URL}/login`, credentials);
+    const token = response.data.token; // Assuming token is returned as response.data.token
+    if (token) {
+      localStorage.setItem('token', token); // Save token to localStorage
+    }
+    return { token, username: response.data.username }; // Save token and username
   } catch (error) {
-    return thunkAPI.rejectWithValue(error.response?.data || "An error occurred");
+    return thunkAPI.rejectWithValue(error.response?.data || 'An error occurred');
   }
 });
 
-// Register
-export const register = createAsyncThunk(
-  'auth/register',
-  async (registrationData, thunkAPI) => {
-    try {
-      const response = await axios.post(`${API_URL}/register`, registrationData); // Corrected URL
-      return response.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response?.data || "An error occurred");
-    }
+// Register action
+export const register = createAsyncThunk('auth/register', async (registrationData, thunkAPI) => {
+  try {
+    const response = await axios.post(`${API_URL}/register`, registrationData);
+    return response.data; // Assuming registration response contains success message
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response?.data || 'An error occurred');
   }
-);
+});
+
+// Logout action
+export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
+  try {
+    localStorage.removeItem('token'); // Remove token from localStorage
+    return true;
+  } catch (error) {
+    return thunkAPI.rejectWithValue('An error occurred during logout');
+  }
+});
 
 // Auth slice
 const authSlice = createSlice({
@@ -36,7 +44,8 @@ const authSlice = createSlice({
     user: null, // User data
     isLoading: false, // Loading state
     error: null, // Error message
-    success: false, // Success flag for feedback
+    success: false, // Success state
+    token: localStorage.getItem('token') || null, // Load token from localStorage
   },
   reducers: {
     clearState: (state) => {
@@ -44,6 +53,8 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.error = null;
       state.success = false;
+      state.token = null;
+      localStorage.removeItem('token'); // Clear token from localStorage
     },
   },
   extraReducers: (builder) => {
@@ -56,7 +67,8 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload; // Save user data
+        state.user = action.payload.username; // Save username
+        state.token = action.payload.token;   // Save JWT token
         state.success = true;
       })
       .addCase(login.rejected, (state, action) => {
@@ -73,12 +85,18 @@ const authSlice = createSlice({
       })
       .addCase(register.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload; // Save user data after registration
-        state.success = true;
+        state.success = true; // Registration successful
       })
       .addCase(register.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
+        state.success = false;
+      })
+
+      // Logout
+      .addCase(logout.fulfilled, (state) => {
+        state.user = null;
+        state.token = null;
         state.success = false;
       });
   },

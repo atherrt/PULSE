@@ -16,22 +16,22 @@ import EditProfile from "./hospitaldashboard/components/heditprofile.jsx";
 
 function App() {
   return (
-   <>
-   <HospitalHeader/>
-   <HospitalInfo/>
-   </>
-    // <Router>
-    //   <AppLayout>
-    //     <Routes>
-    //       <Route path="/" element={<Hero />} />
-    //       <Route path="/login" element={<Login />} />
-    //       <Route path="/signup" element={<SignUpPage />} />
-    //       {/* <Route path="/register-options" element={<RegisterOptions />} /> */}
-    //       <Route path="/hospital-registration" element={<HospitalRegistration />} />
-    //       <Route path="/donor-registration" element={<DonorRegistration />} />
-    //     </Routes>
-    //   </AppLayout>
-    // </Router>
+  //  <>
+  //  <HospitalHeader/>
+  //  <HospitalInfo/>
+  //  </>
+    <Router>
+      <AppLayout>
+        <Routes>
+          <Route path="/" element={<Hero />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          {/* <Route path="/register-options" element={<RegisterOptions />} /> */}
+          <Route path="/hospital-registration" element={<HospitalRegistration />} />
+          <Route path="/donor-registration" element={<DonorRegistration />} />
+        </Routes>
+      </AppLayout>
+    </Router>
   );
 }
 

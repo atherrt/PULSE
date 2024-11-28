@@ -8,12 +8,12 @@ const Login = () => {
   const navigate = useNavigate(); // For navigating after successful login
   const { isLoading, error, success } = useSelector((state) => state.auth);
 
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = (e) => {
     e.preventDefault();
-    dispatch(login({ email, password })); // Dispatch the login action
+    dispatch(login({ username, password })); // Dispatch the login action
   };
 
   // Reset state and navigate on successful login
@@ -43,18 +43,18 @@ const Login = () => {
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label
-                htmlFor="email"
+                htmlFor="username"
                 className="block text-sm font-medium text-gray-600"
               >
-                Email
+                Username
               </label>
               <input
-                type="email"
-                id="email"
-                placeholder="Enter your email"
+                type="text"
+                id="username"
+                placeholder="Enter your username"
                 className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 required
               />
             </div>

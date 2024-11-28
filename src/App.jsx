@@ -12,26 +12,28 @@ import AppLayout from "./layouts/al1";
 
 import HospitalInfo from "./hospitaldashboard/components/hospitalhomepage";
 import HospitalHeader from "./hospitaldashboard/components/hospitalheader";
-import EditProfile from "./hospitaldashboard/components/heditprofile.jsx";
+import HospitalEditProfile from "./hospitaldashboard/components/heditprofile.jsx";
 
 function App() {
   return (
-  //  <>
-  //  <HospitalHeader/>
-  //  <HospitalInfo/>
-  //  </>
-    <Router>
-      <AppLayout>
-        <Routes>
-          <Route path="/" element={<Hero />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUpPage />} />
-          {/* <Route path="/register-options" element={<RegisterOptions />} /> */}
-          <Route path="/hospital-registration" element={<HospitalRegistration />} />
-          <Route path="/donor-registration" element={<DonorRegistration />} />
-        </Routes>
-      </AppLayout>
-    </Router>
+   <>
+   <HospitalHeader/>
+   <HospitalEditProfile/>
+
+
+   </>
+    // <Router>
+    //   <AppLayout>
+    //     <Routes>
+    //       <Route path="/" element={<Hero />} />
+    //       <Route path="/login" element={<Login />} />
+    //       <Route path="/signup" element={<SignUpPage />} />
+    //       {/* <Route path="/register-options" element={<RegisterOptions />} /> */}
+    //       <Route path="/hospital-registration" element={<HospitalRegistration />} />
+    //       <Route path="/donor-registration" element={<DonorRegistration />} />
+    //     </Routes>
+    //   </AppLayout>
+    // </Router>
   );
 }
 

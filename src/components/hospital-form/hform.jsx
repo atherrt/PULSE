@@ -1,167 +1,194 @@
-import React from "react";
+import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { registerHospital } from "../../features/hospitalSlice";
 
 const HospitalRegistration = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // Retrieve userId and email from the navigation state
+  const { userId ,username} = location.state || {};
+  console.log(userId);
+  const [formData, setFormData] = useState({
+    userId: userId || 0, // Default userId is set to 0 if not passed
+    roleId: 1, // Default roleId is set to 1
+    fullName: username,
+    phoneNumber: "",
+    emergencyContact: "",
+    address: "",
+    hospitalName: "",
+    websiteURL: "",
+    licenseNumber: "",
+    licenseExpiryDate: "",
+
+    
+
+  });
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData({ ...formData, [id]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // // Validate required fields
+    // if (!formData.hospitalName || !formData.ownerName || !formData.email) {
+    //   alert("Please fill in all required fields.");
+    //   return;
+    // }
+
+    // Dispatch hospital registration with userId and roleId included
+    const hospitalData = { ...formData, userId, roleId: 1 }; // Ensure roleId is passed
+    dispatch(registerHospital(hospitalData));
+
+    // Navigate to the dashboard after registration
+    navigate("/dashboard");
+  };
+
   return (
     <div className="flex items-center justify-center h-screen bg-rose-200">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-5xl">
-        <form className="grid grid-cols-2 gap-6">
+        <h2 className="text-2xl font-bold text-gray-700 mb-6">
+          Hospital Registration
+        </h2>
+        <form className="grid grid-cols-2 gap-6" onSubmit={handleSubmit}>
+          {/* Owner Name */}
           <div>
-            <label
-              htmlFor="owner-name"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="ownerName" className="block text-sm font-medium text-gray-700">
               Owner Name
             </label>
             <input
               type="text"
-              id="owner-name"
+              id="ownerName"
+              value={formData.fullName}
+              onChange={handleChange}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-rose-500 focus:border-rose-500"
-              placeholder="Value"
+              placeholder="Enter owner's name"
+              required
             />
           </div>
 
+          {/* Hospital Name */}
           <div>
-            <label
-              htmlFor="hospital-name"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="hospitalName" className="block text-sm font-medium text-gray-700">
               Hospital Name
             </label>
             <input
               type="text"
-              id="hospital-name"
+              id="hospitalName"
+              value={formData.hospitalName}
+              onChange={handleChange}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-rose-500 focus:border-rose-500"
-              placeholder="Value"
+              placeholder="Enter hospital name"
+              required
             />
           </div>
 
+          {/* Phone Number */}
           <div>
-            <label
-              htmlFor="phone-number"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
               Phone Number
             </label>
             <input
               type="text"
-              id="phone-number"
+              id="phoneNumber"
+              value={formData.phoneNumber}
+              onChange={handleChange}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-rose-500 focus:border-rose-500"
-              placeholder="Value"
+              placeholder="Enter phone number"
             />
           </div>
 
+          {/* Emergency Contact */}
           <div>
-            <label
-              htmlFor="emergency-contact"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="emergencyContact" className="block text-sm font-medium text-gray-700">
               Emergency Contact
             </label>
             <input
               type="text"
-              id="emergency-contact"
+              id="emergencyContact"
+              value={formData.emergencyContact}
+              onChange={handleChange}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-rose-500 focus:border-rose-500"
-              placeholder="Value"
+              placeholder="Enter emergency contact"
             />
           </div>
 
-          <div>
-            <label
-              htmlFor="hospital-type"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Hospital Type
-            </label>
-            <select
-              id="hospital-type"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-rose-500 focus:border-rose-500"
-            >
-              <option value="">Drop down</option>
-            </select>
-          </div>
+        
+         
 
+          {/* Address */}
           <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Email
-            </label>
-            <input
-              type="text"
-              id="email"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-rose-500 focus:border-rose-500"
-              placeholder="Value"
-            />
-
-          </div>
-
-          <div>
-            <label
-              htmlFor="address"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="address" className="block text-sm font-medium text-gray-700">
               Address
             </label>
             <input
               type="text"
               id="address"
+              value={formData.address}
+              onChange={handleChange}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-rose-500 focus:border-rose-500"
-              placeholder="Value"
+              placeholder="Enter address"
             />
           </div>
 
+          {/* Website URL */}
           <div>
-            <label
-              htmlFor="website-url"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="websiteURL" className="block text-sm font-medium text-gray-700">
               Website URL
             </label>
             <input
-              type="url"
-              id="website-url"
+              type="text"
+              id="websiteURL"
+              value={formData.websiteURL}
+              onChange={handleChange}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-rose-500 focus:border-rose-500"
-              placeholder="Value"
+              placeholder="Enter website URL"
             />
           </div>
 
+          {/* License Number */}
           <div>
-            <label
-              htmlFor="license-number"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="licenseNumber" className="block text-sm font-medium text-gray-700">
               License Number
             </label>
             <input
               type="text"
-              id="license-number"
+              id="licenseNumber"
+              value={formData.licenseNumber}
+              onChange={handleChange}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-rose-500 focus:border-rose-500"
-              placeholder="Value"
+              placeholder="Enter license number"
             />
           </div>
 
+          {/* License Expiry Date */}
           <div>
-            <label
-              htmlFor="license-expiry-date"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="licenseExpiryDate" className="block text-sm font-medium text-gray-700">
               License Expiry Date
             </label>
             <input
               type="date"
-              id="license-expiry-date"
+              id="licenseExpiryDate"
+              value={formData.licenseExpiryDate}
+              onChange={handleChange}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-rose-500 focus:border-rose-500"
+              required
             />
           </div>
-        </form>
 
-        <button
-          type="submit"
-          className="w-full bg-rose-700 hover:bg-rose-800 text-white py-2 px-4 rounded-md mt-6"
-        >
-          Register
-        </button>
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="mt-4 w-full bg-rose-700 text-white py-2 px-4 rounded-md"
+          >
+            Register Hospital
+          </button>
+        </form>
       </div>
     </div>
   );

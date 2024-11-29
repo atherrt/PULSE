@@ -3,7 +3,7 @@ import authReducer from './src/features/authSlice'; // Adjust the path to where 
 import hospitalInfoReducer from './src/features/hospitalinfoSlice'
 import heditReducer from './src/features/heditSlice';
 import ratingReducer from "./src/features/ratingslice";
-
+import hospitalReducer from "./src/features/hospitalSlice"
 
 const store = configureStore({
   reducer: {
@@ -11,6 +11,8 @@ const store = configureStore({
     hospitalInfo: hospitalInfoReducer,
     hedit: heditReducer,
     ratings: ratingReducer,
+    hospital: hospitalReducer,
+    
       
   },
 });

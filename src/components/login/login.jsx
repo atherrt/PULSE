@@ -19,9 +19,9 @@ const Login = () => {
   // Reset state and navigate on successful login
   useEffect(() => {
     if (success) {
-      if (user && user.role === "hospital") {
+      if (user && user.role === "Hospital") {
         navigate("/hospital-dashboard"); // Redirect to hospital dashboard if role is hospital
-      } else if (user && user.role === "user") {
+      } else if (user && user.role === "Donor") {
         navigate("/user-dashboard"); // Redirect to user dashboard if role is user
       } else {
         navigate("/"); // Default route if role is not found

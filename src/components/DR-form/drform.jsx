@@ -1,28 +1,19 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-//import { registerDonor } from "../../features/donorSlice"; // Import the action for registering donor
+import { registerDonor } from "../../features/DonorSlice"; // Import the action for registering donor
 
 const DonorRegistration = () => {
   const location = useLocation();
   const dispatch = useDispatch();
 
   const { userId ,username} = location.state || {};
+  console.log(userId,username);
   const [formData, setFormData] = useState({
-    // fullName: "",
-    // dob: "",
-    // phoneNumber: "",
-    // emergencyContact: "",
-    // bloodGroup: "",
-    // email: "",
-    // weight: "",
-    // height: "",
-    // cnic: "",
-    // address: "",
-
+   
     userId: userId || 0, 
     roleId: 2,
-    fullName: usrname,
+    fullName: username,
     phoneNumber: "",
     emergencyContact: "",
     address: "",
@@ -30,8 +21,8 @@ const DonorRegistration = () => {
     dateOfBirth: "",
     weight: 0,
     height: 0,
-    cnic: string,
-    "bloodGroupId": 0
+    cnic: "",
+    bloodGroupId: 0
   });
 
   const handleChange = (e) => {

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const userHeader = () => {
+const UserHeader = () => {
   return (
     <header className="flex items-center justify-between px-8 py-4 bg-white shadow-md">
       {/* Logo */}
@@ -40,4 +40,4 @@ const userHeader = () => {
   );
 };
 
-export default userHeader;
+export default UserHeader;

@@ -16,7 +16,7 @@ const userHeader = () => {
       {/* Navigation Links */}
       <nav className="flex items-center space-x-8 text-sm">
         <a href="#nearby-hospitals" className="text-red-600 hover:underline">
-          VIEW NEARBY HOSPITALS
+          VIEW PULSE VERIFIED HOSPITALS
         </a>
         <a href="#donate" className="text-red-600 hover:underline">
           DONATE

@@ -7,7 +7,7 @@ import SignUpPage from "./components/register/register";
 // import RegisterOptions from "./components/register_as/registeras";
 import HospitalRegistration from "./components/hospital-form/hform";
 import DonorRegistration from "./components/DR-form/drform";
-import UserHeader from "./userdashboard/components/header/userheader";
+import UserHeader from "./userdashboard/components/userheader";
 import AppLayout from "./layouts/al1";
 
 import HospitalInfo from "./hospitaldashboard/components/hospitalhomepage";
@@ -16,12 +16,16 @@ import HospitalEditProfile from "./hospitaldashboard/components/heditprofile.jsx
 import ViewRating from "./hospitaldashboard/components/viewrating.jsx";
 import Reviews from "./hospitaldashboard/components/viewreviews.jsx";
 
+import UserInfoCard from "./userdashboard/components/userhomepage.jsx";
+import RegistrationForm from "./userdashboard/components/usereditprofile.jsx";
+import DonationHistory from "./userdashboard/components/udonationshistory.jsx";
+
 function App() {
   return (
    
     <>
-    <HospitalHeader/>
-    
+    <UserHeader/>
+    <DonationHistory/>
     </>
     // <Router>
     //    <AppLayout>

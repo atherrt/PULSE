@@ -5,6 +5,9 @@ import SignUpPage from "./components/register/register";
 import HospitalRegistration from "./components/hospital-form/hform";
 import DonorRegistration from "./components/DR-form/drform";
 import AppLayout from "./layouts/al1";
+import HospitalLayout from "./layouts/HospitalLayout.jsx";
+import ProtectedRoute from "./ProtectedRoute.jsx"; // Import ProtectedRoute
+
 import UserHeader from "./userdashboard/components/userheader.jsx";
 import UserInfoCard from "./userdashboard/components/userhomepage.jsx";
 import HospitalInfo from "./hospitaldashboard/components/hospitalhomepage";
@@ -13,14 +16,9 @@ import ViewRating from "./hospitaldashboard/components/viewrating.jsx";
 import Reviews from "./hospitaldashboard/components/viewreviews.jsx";
 
 import DonationHistory from "./userdashboard/components/udonationshistory.jsx";
- 
-import HospitalLayout from "./layouts/HospitalLayout.jsx";
 
 function App() {
   return (
-   
-    
- 
     <Router>
       <Routes>
         {/* Public Routes */}
@@ -30,18 +28,50 @@ function App() {
         <Route path="/hospital-registration" element={<HospitalRegistration />} />
         <Route path="/donor-registration" element={<DonorRegistration />} />
 
-      
-          <Route path="/hospital-dashboard" element={<HospitalLayout><HospitalInfo /></HospitalLayout>} />
-          <Route path="/edit-profile" element={<HospitalLayout><HospitalEditProfile /></HospitalLayout>} />
-          <Route path="/view-rating" element={<HospitalLayout><ViewRating /></HospitalLayout>} />
-          <Route path="/view-reviews" element={<HospitalLayout><Reviews /></HospitalLayout>} />
-     
-          <Route path="/donor-dashboard" element={<DonationHistory/>} />
-        
-   
+        {/* Protected Routes */}
+        {/* Hospital Routes */}
+        <Route
+          path="/hospital-dashboard"
+          element={
+            <ProtectedRoute requiredRole={1}>
+              <HospitalLayout><HospitalInfo /></HospitalLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edit-profile"
+          element={
+            <ProtectedRoute requiredRole={1}>
+              <HospitalLayout><HospitalEditProfile /></HospitalLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/view-rating"
+          element={
+            <ProtectedRoute requiredRole={1}>
+              <HospitalLayout><ViewRating /></HospitalLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/view-reviews"
+          element={
+            <ProtectedRoute requiredRole={1}>
+              <HospitalLayout><Reviews /></HospitalLayout>
+            </ProtectedRoute>
+          }
+        />
 
-       
-      
+        {/* Donor Routes */}
+        <Route
+          path="/donor-dashboard"
+          element={
+            <ProtectedRoute requiredRole={2}>
+              <DonationHistory />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );

@@ -1,28 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom"; // Added `useNavigate` for redirection
+import { Link, useNavigate } from "react-router-dom";
 import { login, clearState } from "../../features/authSlice"; // Adjust the path based on your project structure
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate(); // For navigating after successful login
-  const { isLoading, error, success } = useSelector((state) => state.auth);
+  const { isLoading, error, success, user } = useSelector((state) => state.auth); // Added `user` for role-based navigation
 
-  const [username, setUsername] = useState("");
+  const [UsernameOrEmail, setUsernameOrEmail] = useState(""); // Match field name
   const [password, setPassword] = useState("");
 
   const handleLogin = (e) => {
     e.preventDefault();
-    dispatch(login({ username, password })); // Dispatch the login action
+    dispatch(login({ UsernameOrEmail, password })); // Dispatch the correct fields
   };
 
   // Reset state and navigate on successful login
   useEffect(() => {
     if (success) {
-      navigate("/dashboard"); // Replace with the actual route after login
+      if (user && user.role === "Hospital") {
+        navigate("/hospital-dashboard"); // Redirect to hospital dashboard if role is hospital
+      } else if (user && user.role === "Donor") {
+        navigate("/user-dashboard"); // Redirect to user dashboard if role is user
+      } else {
+        navigate("/"); // Default route if role is not found
+      }
       dispatch(clearState()); // Clear success and error states
     }
-  }, [success, dispatch, navigate]);
+  }, [success, dispatch, navigate, user]);
 
   return (
     <div className="bg-red-100 min-h-screen flex flex-col">
@@ -43,18 +49,18 @@ const Login = () => {
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label
-                htmlFor="username"
+                htmlFor="UsernameOrEmail"
                 className="block text-sm font-medium text-gray-600"
               >
-                Username
+                Email or Username
               </label>
               <input
                 type="text"
-                id="username"
-                placeholder="Enter your username"
+                id="UsernameOrEmail"
+                placeholder="Enter your email or username"
                 className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={UsernameOrEmail}
+                onChange={(e) => setUsernameOrEmail(e.target.value)}
                 required
               />
             </div>

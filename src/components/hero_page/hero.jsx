@@ -1,5 +1,6 @@
 // Hero.jsx
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -16,18 +17,18 @@ const Hero = () => {
 
         {/* Call-to-Action Buttons */}
         <div className="mt-6 flex justify-center space-x-4">
-          <a
-            href="#donate"
+          <Link
+            to="/signup"
             className="bg-red-600 text-white px-6 py-3 rounded-md text-sm font-medium hover:bg-red-700 transition duration-150"
           >
             Donate Now
-          </a>
-          <a
-            href="#learn-more"
+          </Link>
+          <Link
+            to="/"
             className="bg-gray-200 text-gray-800 px-6 py-3 rounded-md text-sm font-medium hover:bg-gray-300 transition duration-150"
           >
             Learn More
-          </a>
+          </Link>
         </div>
       </div>
     </div>

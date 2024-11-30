@@ -24,10 +24,7 @@ import AppLayout from "./layouts/al1"; // Assuming AppLayout is your layout comp
 function App() {
   return (
    
-    <>
-    <UserHeader/>
-    <DonationHistory/>
-    </>
+    
     // <Router>
     //    <AppLayout>
     //      <Routes>

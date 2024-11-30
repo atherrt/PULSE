@@ -18,8 +18,7 @@ import Reviews from "./hospitaldashboard/components/viewreviews.jsx";
 import UserInfoCard from "./userdashboard/components/userhomepage.jsx";
 import RegistrationForm from "./userdashboard/components/usereditprofile.jsx";
 import DonationHistory from "./userdashboard/components/udonationshistory.jsx";
-import UserHeader from "./userdashboard/components/header/userheader";
-import AppLayout from "./layouts/al1"; // Assuming AppLayout is your layout component
+
 
 function App() {
   return (

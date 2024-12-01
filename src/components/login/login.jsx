@@ -6,29 +6,30 @@ import { login, clearState } from "../../features/authSlice"; // Adjust the path
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate(); // For navigating after successful login
-  const { isLoading, error, success, user } = useSelector((state) => state.auth); // Added `user` for role-based navigation
-
+  const { isLoading, error, success, user, roleId } = useSelector((state) => state.auth); // Access user and roleId from auth
+  console.log(roleId);
   const [UsernameOrEmail, setUsernameOrEmail] = useState(""); // Match field name
   const [password, setPassword] = useState("");
 
   const handleLogin = (e) => {
     e.preventDefault();
-    dispatch(login({ UsernameOrEmail, password })); // Dispatch the correct fields
+    dispatch(login({ UsernameOrEmail, password })); // No need to pass role, it will be handled in the backend
   };
 
   // Reset state and navigate on successful login
   useEffect(() => {
     if (success) {
-      if (user && user.role === "Hospital") {
-        navigate("/hospital-dashboard"); // Redirect to hospital dashboard if role is hospital
-      } else if (user && user.role === "Donor") {
-        navigate("/user-dashboard"); // Redirect to user dashboard if role is user
+      // Redirect based on the roleId (roleId should be set in the response)
+      if (roleId === 1) {
+        navigate("/hospital-dashboard"); // Redirect to hospital dashboard if roleId is 1
+      } else if (roleId === 2) {
+        navigate("/donor-dashboard"); // Redirect to donor dashboard if roleId is 2
       } else {
-        navigate("/"); // Default route if role is not found
+        navigate("/"); // Default route if role is not recognized
       }
       dispatch(clearState()); // Clear success and error states
     }
-  }, [success, dispatch, navigate, user]);
+  }, [success, roleId, dispatch, navigate]);
 
   return (
     <div className="bg-red-100 min-h-screen flex flex-col">
@@ -81,6 +82,7 @@ const Login = () => {
                 required
               />
             </div>
+
             <button
               type="submit"
               className="w-full bg-red-600 text-white py-2 rounded-md text-sm font-medium hover:bg-red-700 transition duration-150"

@@ -2,15 +2,14 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // Replace with your actual backend URL
-const BACKEND_URL = "https://674760f338c8741641d68647.mockapi.io/api/v1/hospital-info/Info";
+const BACKEND_URL = "https://9603-2400-adc5-43c-4600-c19e-e9c8-59bd-d927.ngrok-free.app/api/hospital/get";
 
-// Define an async thunk to fetch hospital data
 export const fetchHospitalInfo = createAsyncThunk(
   "hospitalInfo/fetchHospitalInfo",
-  async (_, thunkAPI) => {
+  async (hospitalId, thunkAPI) => {
     try {
-      const response = await axios.get(BACKEND_URL);
-      console.log(response.data);
+      const response = await axios.get(`${BACKEND_URL}/${hospitalId}`);
+      console.log(response);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || "Failed to fetch hospital info");
@@ -19,18 +18,7 @@ export const fetchHospitalInfo = createAsyncThunk(
 );
 
 const initialState = {
-  data: {
-    name: "",
-    joinedsince: "",
-    licenseNumber: "",
-    contactInfo: "",
-    // beds: 0,
-    // wards: 0,
-    // emergencyWard: "",
-    // overallFeedback: 0,
-    // hospitalTimings: "",
-    // phone: "",
-  },
+  data: {},
   loading: false,
   error: null,
 };

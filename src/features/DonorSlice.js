@@ -8,13 +8,13 @@ export const registerDonor = createAsyncThunk(
   async (donorData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        'https://7d9c-2400-adc5-43c-4600-c40f-b5c1-81d1-ef1a.ngrok-free.app/api/auth/registerAsDonor',
+        'https://9603-2400-adc5-43c-4600-c19e-e9c8-59bd-d927.ngrok-free.app/api/auth/registerAsPatient',
         donorData
       );
       console.log(response.data);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || "Something went wrong");
+      return rejectWithValue(error.response?.data || 'Something went wrong');
     }
   }
 );
@@ -23,10 +23,15 @@ const donorSlice = createSlice({
   name: 'donor',
   initialState: {
     donor: null,
+    role: 2, // Default role set to 2 for donor
     loading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    setDonorRole: (state, action) => {
+      state.role = action.payload; // Allow updating role
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(registerDonor.pending, (state) => {
@@ -34,7 +39,8 @@ const donorSlice = createSlice({
       })
       .addCase(registerDonor.fulfilled, (state, action) => {
         state.loading = false;
-        state.donor = action.payload; // Store the response data
+        state.donor = action.payload; // Store the response data (e.g., donor information)
+        state.role = 2; // Default role for donor is 2 (this can be dynamic based on response)
       })
       .addCase(registerDonor.rejected, (state, action) => {
         state.loading = false;
@@ -42,5 +48,7 @@ const donorSlice = createSlice({
       });
   },
 });
+
+export const { setDonorRole } = donorSlice.actions;
 
 export default donorSlice.reducer;

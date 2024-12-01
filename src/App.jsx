@@ -1,58 +1,79 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Hero from "./components/hero_page/hero";
-import Footer from "./components/footer/footer";
-import Header from "./components/header/header.jsx";
 import Login from "./components/login/login";
 import SignUpPage from "./components/register/register";
 import HospitalRegistration from "./components/hospital-form/hform";
 import DonorRegistration from "./components/DR-form/drform";
-import UserHeader from "./userdashboard/components/userheader";
 import AppLayout from "./layouts/al1";
+import HospitalLayout from "./layouts/HospitalLayout.jsx";
+import ProtectedRoute from "./ProtectedRoute.jsx"; // Import ProtectedRoute
 
-import HospitalHeader from "./hospitaldashboard/components/hospitalheader";
+import UserHeader from "./userdashboard/components/userheader.jsx";
+import UserInfoCard from "./userdashboard/components/userhomepage.jsx";
 import HospitalInfo from "./hospitaldashboard/components/hospitalhomepage";
 import HospitalEditProfile from "./hospitaldashboard/components/heditprofile.jsx";
 import ViewRating from "./hospitaldashboard/components/viewrating.jsx";
 import Reviews from "./hospitaldashboard/components/viewreviews.jsx";
 
-import UserInfoCard from "./userdashboard/components/userhomepage.jsx";
-import RegistrationForm from "./userdashboard/components/usereditprofile.jsx";
 import DonationHistory from "./userdashboard/components/udonationshistory.jsx";
 
 function App() {
   return (
-    <>
-    <UserHeader/>
-    <RegistrationForm/>    
-    </>
-    // <Router>
-    //   <Routes>
-    //     {/* Public Routes */}
-    //     <Route path="/" element={<AppLayout><Hero /></AppLayout>} />
-    //     <Route path="/login" element={<AppLayout><Login /></AppLayout>} />
-    //     <Route path="/signup" element={<AppLayout><SignUpPage /></AppLayout>} />
-    //     <Route path="/hospital-registration" element={<HospitalRegistration />} />
-    //     <Route path="/donor-registration" element={<DonorRegistration />} />
+    <Router>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<AppLayout><Hero /></AppLayout>} />
+        <Route path="/login" element={<AppLayout><Login /></AppLayout>} />
+        <Route path="/signup" element={<AppLayout><SignUpPage /></AppLayout>} />
+        <Route path="/hospital-registration" element={<HospitalRegistration />} />
+        <Route path="/donor-registration" element={<DonorRegistration />} />
 
-    //     {/* Hospital Dashboard Routes */}
-    //     <Route path="/hospital-dashboard" element={<HospitalHeader />}>
-    //       <Route index element={<HospitalInfo />} />
-    //       <Route path="edit-profile" element={<HospitalEditProfile />} />
-    //       <Route path="view-rating" element={<ViewRating />} />
-    //       <Route path="view-reviews" element={<Reviews />} />
-    //     </Route>
+        {/* Protected Routes */}
+        {/* Hospital Routes */}
+        <Route
+          path="/hospital-dashboard"
+          element={
+            <ProtectedRoute requiredRole={1}>
+              <HospitalLayout><HospitalInfo /></HospitalLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edit-profile"
+          element={
+            <ProtectedRoute requiredRole={1}>
+              <HospitalLayout><HospitalEditProfile /></HospitalLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/view-rating"
+          element={
+            <ProtectedRoute requiredRole={1}>
+              <HospitalLayout><ViewRating /></HospitalLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/view-reviews"
+          element={
+            <ProtectedRoute requiredRole={1}>
+              <HospitalLayout><Reviews /></HospitalLayout>
+            </ProtectedRoute>
+          }
+        />
 
-    //     {/* User Dashboard Routes */}
-    //     <Route path="/user-dashboard" element={<UserHeader />}>
-    //       {/* Add routes for the user dashboard here */}
-    //       {/* Example: */}
-    //       {/* <Route path="profile" element={<UserProfile />} /> */}
-    //     </Route>
-
-    //     {/* Protected Routes Layout */}
-      
-    //   </Routes>
-    // </Router>
+        {/* Donor Routes */}
+        <Route
+          path="/donor-dashboard"
+          element={
+            <ProtectedRoute requiredRole={2}>
+              <DonationHistory />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </Router>
   );
 }
 

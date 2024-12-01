@@ -1,25 +1,25 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const API_URL = 'https://7d9c-2400-adc5-43c-4600-c40f-b5c1-81d1-ef1a.ngrok-free.app/api/auth';
+const API_URL = 'https://9603-2400-adc5-43c-4600-c19e-e9c8-59bd-d927.ngrok-free.app/api/auth';
 
 // Login action
 export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI) => {
   try {
-    // Ensure the field is sent as UsernameOrEmail
     const response = await axios.post(`${API_URL}/login`, {
       UsernameOrEmail: credentials.UsernameOrEmail, 
       password: credentials.password,             
     });
 
-    console.log("Response data:", response.data); // Debug response
+    console.log("Response data:", response.data); 
 
-    const { token, email, fullName, userId } = response.data.data; // Assuming these are the keys in the response
+    const { token, email, fullName, userId, roleId } = response.data.data; // Capture roleId from the response
     if (token) {
-      localStorage.setItem('token', token); // Save token to localStorage
+      localStorage.setItem('token', token);
+      localStorage.setItem('roleId', roleId); // Save roleId to localStorage
     }
 
-    return { token, email, fullName, userId }; // Include userId
+    return { token, email, fullName, userId, roleId }; // Include roleId in the returned data
   } catch (error) {
     console.error("Login error:", error.response?.data || error.message); 
     return thunkAPI.rejectWithValue(error.response?.data || 'An error occurred');
@@ -31,11 +31,12 @@ export const register = createAsyncThunk('auth/register', async (registrationDat
   try {
     const response = await axios.post(`${API_URL}/signupWithEmail`, registrationData);
     console.log(response.data);
-    const { token, email, fullName, userId } = response.data.data; // Assuming these are the keys in the response
+    const { token, email, fullName, userId, roleId } = response.data.data; // Assuming these are the keys in the response
     if (token) {
       localStorage.setItem('token', token); // Save token to localStorage
+      localStorage.setItem('roleId', roleId); // Save roleId to localStorage
     }
-    return { token, email, fullName, userId }; // Include userId
+    return { token, email, fullName, userId, roleId }; // Include roleId
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response?.data || 'An error occurred');
   }
@@ -45,6 +46,8 @@ export const register = createAsyncThunk('auth/register', async (registrationDat
 export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
   try {
     localStorage.removeItem('token'); // Clear token on logout
+    localStorage.removeItem('roleId'); // Clear roleId on logout
+    localStorage.removeItem('userId'); // Clear userId on logout
     return true;
   } catch (error) {
     return thunkAPI.rejectWithValue('An error occurred during logout');
@@ -60,7 +63,9 @@ const authSlice = createSlice({
     error: null, // Stores error messages
     success: false, // Tracks success state
     token: localStorage.getItem('token') || null, // Persist token
-    userId: null, // Stores the userId
+    userId: localStorage.getItem('userId') || null, // Persist userId
+    role: localStorage.getItem('role') || null, // Persist role
+    roleId: localStorage.getItem('roleId') || null, // Persist roleId
   },
   reducers: {
     clearState: (state) => {
@@ -70,7 +75,12 @@ const authSlice = createSlice({
       state.success = false;
       state.token = null;
       state.userId = null; // Clear userId
-      localStorage.removeItem('token'); // Clear token on state reset
+      state.role = null; // Clear role
+      state.roleId = null; // Clear roleId
+      localStorage.removeItem('token'); // Clear token
+      localStorage.removeItem('role'); // Clear role
+      localStorage.removeItem('roleId'); // Clear roleId
+      localStorage.removeItem('userId'); // Clear userId
     },
   },
   extraReducers: (builder) => {
@@ -89,6 +99,12 @@ const authSlice = createSlice({
         }; // Save user info
         state.token = action.payload.token; // Save JWT token
         state.userId = action.payload.userId; // Save userId
+        state.role = action.payload.role; // Save role
+        state.roleId = action.payload.roleId; // Save roleId
+        localStorage.setItem('token', action.payload.token); // Save token
+        localStorage.setItem('role', action.payload.role); // Save role
+        localStorage.setItem('roleId', action.payload.roleId); // Save roleId
+        localStorage.setItem('userId', action.payload.userId); // Save userId
         state.success = true;
       })
       .addCase(login.rejected, (state, action) => {
@@ -112,6 +128,12 @@ const authSlice = createSlice({
           fullName: action.payload.fullName,
         }; // Save user info
         state.userId = action.payload.userId; // Save userId
+        state.role = action.payload.role; // Save role
+        state.roleId = action.payload.roleId; // Save roleId
+        localStorage.setItem('token', action.payload.token); // Save token
+        localStorage.setItem('role', action.payload.role); // Save role
+        localStorage.setItem('roleId', action.payload.roleId); // Save roleId
+        localStorage.setItem('userId', action.payload.userId); // Save userId
       })
       .addCase(register.rejected, (state, action) => {
         state.isLoading = false;
@@ -124,6 +146,8 @@ const authSlice = createSlice({
         state.user = null;
         state.token = null;
         state.userId = null; // Clear userId
+        state.role = null; // Clear role
+        state.roleId = null; // Clear roleId
         state.success = false;
       });
   },

@@ -1,30 +1,31 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { registerDonor } from "../../features/DonorSlice"; // Import the action for registering donor
+import { registerDonor } from "../../features/DonorSlice";
 
 const DonorRegistration = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  
+  const { userId, username } = location.state || {};
+  console.log(userId);
 
-  const { userId ,username} = location.state || {};
-  console.log(userId,username);
   const [formData, setFormData] = useState({
-   
-    userId: userId || 0, 
+    userId: userId || 0,
     roleId: 2,
-    fullName: username,
+    fullName: username || "",
     phoneNumber: "",
     emergencyContact: "",
     address: "",
     patientId: 0,
     dateOfBirth: "",
-    weight: 0,
-    height: 0,
-    cnic: "",
-    bloodGroupId: 0
+    weight: 5,
+    height: 5,
+    cnic: "35202",
+    bloodGroupId: 0,
+    email: "",
   });
-
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
@@ -41,8 +42,8 @@ const DonorRegistration = () => {
     // Dispatch the action to register the donor
     dispatch(registerDonor(formData));
 
-    // You can navigate to another page after registration if needed, e.g., dashboard
-    // navigate("/dashboard"); 
+    // Navigate to confirmation or dashboard page
+    navigate("/");
   };
 
   return (
@@ -50,12 +51,12 @@ const DonorRegistration = () => {
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-5xl border-2 border-blue-500">
         <form className="grid grid-cols-3 gap-6" onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="full-name" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
               Full Name
             </label>
             <input
               type="text"
-              id="full-name"
+              id="fullName"
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-rose-500 focus:border-rose-500"
               value={formData.fullName}
               onChange={handleChange}
@@ -65,26 +66,26 @@ const DonorRegistration = () => {
           </div>
 
           <div>
-            <label htmlFor="dob" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700">
               DOB
             </label>
             <input
               type="date"
-              id="dob"
+              id="dateOfBirth"
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-rose-500 focus:border-rose-500"
-              value={formData.dob}
+              value={formData.dateOfBirth}
               onChange={handleChange}
               required
             />
           </div>
 
           <div>
-            <label htmlFor="phone-number" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
               Phone Number
             </label>
             <input
               type="text"
-              id="phone-number"
+              id="phoneNumber"
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-rose-500 focus:border-rose-500"
               value={formData.phoneNumber}
               onChange={handleChange}
@@ -94,12 +95,12 @@ const DonorRegistration = () => {
           </div>
 
           <div>
-            <label htmlFor="emergency-contact" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="emergencyContact" className="block text-sm font-medium text-gray-700">
               Emergency Contact
             </label>
             <input
               type="text"
-              id="emergency-contact"
+              id="emergencyContact"
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-rose-500 focus:border-rose-500"
               value={formData.emergencyContact}
               onChange={handleChange}
@@ -108,25 +109,25 @@ const DonorRegistration = () => {
           </div>
 
           <div>
-            <label htmlFor="blood-group" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="bloodGroupId" className="block text-sm font-medium text-gray-700">
               Blood Group
             </label>
             <select
-              id="blood-group"
+              id="bloodGroupId"
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-rose-500 focus:border-rose-500"
-              value={formData.bloodGroup}
+              value={formData.bloodGroupId}
               onChange={handleChange}
               required
             >
-              <option value="">Select blood group</option>
-              <option value="A+">A+</option>
-              <option value="O+">O+</option>
-              <option value="B+">B+</option>
-              <option value="AB+">AB+</option>
-              <option value="A-">A-</option>
-              <option value="O-">O-</option>
-              <option value="B-">B-</option>
-              <option value="AB-">AB-</option>
+              <option value={0}>Select blood group</option>
+              <option value={1}>A+</option>
+              <option value={2}>O+</option>
+              <option value={3}>B+</option>
+              <option value={4}>AB+</option>
+              <option value={5}>A-</option>
+              <option value={6}>O-</option>
+              <option value={7}>B-</option>
+              <option value={8}>AB-</option>
             </select>
           </div>
 
@@ -145,48 +146,6 @@ const DonorRegistration = () => {
             />
           </div>
 
-          <div>
-            <label htmlFor="weight" className="block text-sm font-medium text-gray-700">
-              Weight (kg)
-            </label>
-            <input
-              type="number"
-              id="weight"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-rose-500 focus:border-rose-500"
-              value={formData.weight}
-              onChange={handleChange}
-              placeholder="Enter weight"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="height" className="block text-sm font-medium text-gray-700">
-              Height (cm)
-            </label>
-            <input
-              type="number"
-              id="height"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-rose-500 focus:border-rose-500"
-              value={formData.height}
-              onChange={handleChange}
-              placeholder="Enter height"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="cnic" className="block text-sm font-medium text-gray-700">
-              CNIC
-            </label>
-            <input
-              type="text"
-              id="cnic"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-rose-500 focus:border-rose-500"
-              value={formData.cnic}
-              onChange={handleChange}
-              placeholder="Enter CNIC"
-            />
-          </div>
-
           <div className="col-span-3">
             <label htmlFor="address" className="block text-sm font-medium text-gray-700">
               Address
@@ -200,10 +159,10 @@ const DonorRegistration = () => {
               placeholder="Enter address"
             />
           </div>
-          
+
           <button
             type="submit"
-            className="w-full bg-rose-700 hover:bg-rose-800 text-white py-2 px-4 rounded-md mt-6"
+            className="w-full bg-rose-700 hover:bg-rose-800 text-white py-2 px-4 rounded-md mt-6 col-span-3"
           >
             Register
           </button>

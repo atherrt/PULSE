@@ -8,13 +8,13 @@ export const registerHospital = createAsyncThunk(
   async (hospitalData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        'https://7d9c-2400-adc5-43c-4600-c40f-b5c1-81d1-ef1a.ngrok-free.app/api/auth/registerAsHospital',
+        'https://9603-2400-adc5-43c-4600-c19e-e9c8-59bd-d927.ngrok-free.app/api/auth/registerAsHospital',
         hospitalData
       );
-      console.log(response.data)
-      return response.data;
+      console.log(response.data);
+      return response.data; // Return the full response data
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response.data); // If there's an error, return the error message
     }
   }
 );
@@ -25,6 +25,7 @@ const hospitalSlice = createSlice({
     hospital: null,
     loading: false,
     error: null,
+    role: 1,  // Set default role as '1' for hospital
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -35,6 +36,8 @@ const hospitalSlice = createSlice({
       .addCase(registerHospital.fulfilled, (state, action) => {
         state.loading = false;
         state.hospital = action.payload;  // Store the response data
+        // Ensure the role is set as '1' (Hospital)
+        state.role = 1;  
       })
       .addCase(registerHospital.rejected, (state, action) => {
         state.loading = false;

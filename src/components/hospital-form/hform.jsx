@@ -23,8 +23,6 @@ const HospitalRegistration = () => {
     licenseNumber: "",
     licenseExpiryDate: "",
 
-    
-
   });
 
   const handleChange = (e) => {
@@ -46,7 +44,7 @@ const HospitalRegistration = () => {
     dispatch(registerHospital(hospitalData));
 
     // Navigate to the dashboard after registration
-    navigate("/dashboard");
+    navigate("/");
   };
 
   return (

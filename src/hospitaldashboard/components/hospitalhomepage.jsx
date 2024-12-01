@@ -1,14 +1,18 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchHospitalInfo, selectHospitalInfo } from "../../features/hospitalinfoSlice";
+import { useParams } from "react-router-dom";  // Assuming you're using React Router to get hospitalId from URL
 
 const HospitalInfo = () => {
   const dispatch = useDispatch();
+  const { hospitalId } = useParams(); // Fetch hospitalId from URL params
   const { data: hospitalInfo, loading, error } = useSelector(selectHospitalInfo);
 
   useEffect(() => {
-    dispatch(fetchHospitalInfo());
-  }, [dispatch]);
+    if (hospitalId) {
+      dispatch(fetchHospitalInfo(hospitalId)); // Pass the hospitalId when dispatching the fetch action
+    }
+  }, [dispatch, hospitalId]);
 
   if (loading) {
     return (
@@ -26,7 +30,7 @@ const HospitalInfo = () => {
     );
   }
 
-  if (!hospitalInfo) {
+  if (!hospitalInfo || Object.keys(hospitalInfo).length === 0) {
     return (
       <div className="bg-white min-h-screen flex items-center justify-center py-10">
         <p className="text-red-800 font-bold">No hospital information available.</p>
@@ -42,10 +46,10 @@ const HospitalInfo = () => {
           <h2 className="text-red-800 font-bold mb-4">HOSPITAL INFORMATION</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <p>
-              <span className="font-semibold">Name:</span> {hospitalInfo.name}
+              <span className="font-semibold">Name:</span> {hospitalInfo.hospitalName}
             </p>
             <p>
-              <span className="font-semibold">Joined Since:</span> {hospitalInfo.joinedsince}
+              <span className="font-semibold">Joined Since:</span> {hospitalInfo.joinedSince}
             </p>
             <p>
               <span className="font-semibold">License Number:</span> {hospitalInfo.licenseNumber}
@@ -61,10 +65,10 @@ const HospitalInfo = () => {
           <h2 className="text-red-800 font-bold mb-4">LOGISTICS</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <p>
-              <span className="font-semibold">Beds:</span> {hospitalInfo.beds}
+              <span className="font-semibold">Beds:</span> {hospitalInfo.numberOfBeds}
             </p>
             <p>
-              <span className="font-semibold">Wards:</span> {hospitalInfo.wards}
+              <span className="font-semibold">Wards:</span> {hospitalInfo.numberOfWards}
             </p>
             <p>
               <span className="font-semibold">Emergency Ward:</span> {hospitalInfo.emergencyWard}

@@ -40,41 +40,27 @@ const SignUpPage = () => {
 
     dispatch(register(registrationData));
 
-    setStep(2); // Move to next step (role selection)
+    // After registration, move to role selection step
+    setStep(2);
   };
 
   const handleRoleSelection = (role) => {
     setFormData({ ...formData, role });
 
-    const registrationData = {
-      username: formData.username,
-      email: formData.email,
-      password: formData.password,
-      role: role,
-      detailedInfo: formData.detailedInfo,
-    };
-
-    dispatch(register(registrationData));
-
-    if(role=="Hospital"){
-    navigate("/hospital-registration", {
-      state: { userId: userId ,username:username}, // Pass userId to hospital registration page
-    });
-  }
-  else if(role=="Donor")
-  {
-    navigate("/donor-registration", {
-      state: { userId: userId ,username:username}, // Pass userId to hospital registration page
-    });
-  }
-  else
-  {
-    navigate("/"); 
-  }
+    // Navigate to different pages based on the selected role
+    if (role === "Hospital") {
+      navigate("/hospital-registration", {
+        state: { userId: userId, role: role }, // Pass userId and role to hospital registration page
+      });
+    } else if (role === "Donor/Receiver") {
+      navigate("/donor-registration", {
+        state: { userId: userId, role: role }, // Pass userId and role to donor registration page
+      });
+    }
   };
 
   const renderSignUpForm = () => (
-    <div className="flex items-center justify-center h-screen bg-red-100">
+    <div className="flex items-center justify-center h-screen bg-rose-200">
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
         <h2 className="text-2xl font-bold text-gray-700 mb-6">Sign Up</h2>
 
@@ -137,7 +123,7 @@ const SignUpPage = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full ${isLoading ? "bg-gray-400" : "bg-red-600 hover:bg-rose-800"} text-white py-2 px-4 rounded-md mt-4`}
+            className={`w-full ${isLoading ? "bg-gray-400" : "bg-rose-700 hover:bg-rose-800"} text-white py-2 px-4 rounded-md mt-4`}
           >
             {isLoading ? "Signing Up..." : "Sign Up"}
           </button>
@@ -158,7 +144,7 @@ const SignUpPage = () => {
 
         <button
           className="w-full bg-rose-700 text-white py-4 rounded-md text-lg font-semibold hover:bg-rose-800 transition duration-150"
-          onClick={() => handleRoleSelection("Donor")}
+          onClick={() => handleRoleSelection("Donor/Receiver")}
         >
           Register as a Donor / Receiver
         </button>

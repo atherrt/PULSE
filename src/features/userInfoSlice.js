@@ -25,7 +25,7 @@ const dummyData = {
 // Async thunk to fetch user data from API
 export const fetchUserInfo = createAsyncThunk('userInfo/fetchUserInfo', async (_, { rejectWithValue }) => {
   if (USE_DUMMY_DATA) {
-    // Return dummy data directly when using it
+
     return dummyData;
   }
 

@@ -1,8 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const API_URL = 'https://9603-2400-adc5-43c-4600-c19e-e9c8-59bd-d927.ngrok-free.app/api/auth';
+const API_URL = 'https://b843-2400-adc5-43c-4600-b1b1-7f8d-bfeb-7e0e.ngrok-free.app/api/auth';
 
+// Login action
+// Login action
 // Login action
 export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI) => {
   try {
@@ -11,31 +13,39 @@ export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI
       password: credentials.password,             
     });
 
-    console.log("Response data:", response.data); 
+    console.log("Response data:", response.data); // Log the full response to inspect the structure
 
-    const { token, email, fullName, userId, roleId } = response.data.data; // Capture roleId from the response
+    // Destructure the necessary data from the response
+    const { userId, roleId, email, token } = response.data.response || {}; // Access data from 'data' field in response
+
+    // If token is present, save it in localStorage
     if (token) {
       localStorage.setItem('token', token);
       localStorage.setItem('roleId', roleId); // Save roleId to localStorage
     }
 
-    return { token, email, fullName, userId, roleId }; // Include roleId in the returned data
+    return { userId, roleId, email, token }; // Return the required data
   } catch (error) {
-    console.error("Login error:", error.response?.data || error.message); 
+    console.error("Login error:", error.response?.data || error.message);
     return thunkAPI.rejectWithValue(error.response?.data || 'An error occurred');
   }
 });
+
+
+
 
 // Register action
 export const register = createAsyncThunk('auth/register', async (registrationData, thunkAPI) => {
   try {
     const response = await axios.post(`${API_URL}/signupWithEmail`, registrationData);
-    console.log(response.data);
-    const { token, email, fullName, userId, roleId } = response.data.data; // Assuming these are the keys in the response
+    console.log("Response data:", response.data);
+
+    const { token, email, fullName, userId, roleId } = response.data.response; // Access response from data
     if (token) {
       localStorage.setItem('token', token); // Save token to localStorage
       localStorage.setItem('roleId', roleId); // Save roleId to localStorage
     }
+
     return { token, email, fullName, userId, roleId }; // Include roleId
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response?.data || 'An error occurred');

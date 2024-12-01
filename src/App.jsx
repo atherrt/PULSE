@@ -40,9 +40,9 @@ function App() {
         <Route
           path="/hospital-dashboard"
           element={
-            <ProtectedRoute requiredRole={1}>
+             <ProtectedRoute requiredRole={1}>
               <HospitalLayout><HospitalInfo /></HospitalLayout>
-            </ProtectedRoute>
+           </ProtectedRoute>
           }
         />
         <Route
@@ -74,9 +74,9 @@ function App() {
         <Route
           path="/donor-dashboard"
           element={
-            <ProtectedRoute requiredRole={2}>
+          //  <ProtectedRoute requiredRole={2}>
               <DonationHistory />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           }
         />
             <Route

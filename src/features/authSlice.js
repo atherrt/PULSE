@@ -16,14 +16,16 @@ export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI
     console.log("Response data:", response.data); // Log the full response to inspect the structure
 
     // Destructure the necessary data from the response
-    const { userId, roleId, email, token } = response.data.response || {}; // Access data from 'data' field in response
-
+    const {paitentId}=response.data;
+    console.log(paitentId);
+    const { userId, roleId, email, token } = response.data.data.response ||{} ; // Access data from 'data' field in response
+  console.log(roleId);
     // If token is present, save it in localStorage
     if (token) {
       localStorage.setItem('token', token);
       localStorage.setItem('roleId', roleId); // Save roleId to localStorage
     }
-
+  
     return { userId, roleId, email, token }; // Return the required data
   } catch (error) {
     console.error("Login error:", error.response?.data || error.message);

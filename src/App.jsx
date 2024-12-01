@@ -18,6 +18,7 @@ import Reviews from "./hospitaldashboard/components/viewreviews.jsx";
 import DonationHistory from "./userdashboard/components/udonationshistory.jsx";
 import HospitalCards from "./userdashboard/components/viewpulsehospitals.jsx";
 import GiveRating from "./userdashboard/components/giverating.jsx";
+import ForgotPassword from "./components/Forgot-Password/ForgotPassword.jsx";
 function App() {
   return (
    
@@ -26,6 +27,7 @@ function App() {
         {/* Public Routes */}
         <Route path="/" element={<AppLayout><Hero /></AppLayout>} />
         <Route path="/login" element={<AppLayout><Login /></AppLayout>} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/signup" element={<AppLayout><SignUpPage /></AppLayout>} />
         <Route path="/hospital-registration" element={<HospitalRegistration />} />
         <Route path="/donor-registration" element={<DonorRegistration />} />

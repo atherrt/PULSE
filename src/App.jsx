@@ -21,79 +21,82 @@ import GiveRating from "./userdashboard/components/giverating.jsx";
 import ForgotPassword from "./components/Forgot-Password/ForgotPassword.jsx";
 function App() {
   return (
+    <>
+    <ViewRating/>
+    </>
    
-    <Router>
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<AppLayout><Hero /></AppLayout>} />
-        <Route path="/login" element={<AppLayout><Login /></AppLayout>} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/signup" element={<AppLayout><SignUpPage /></AppLayout>} />
-        <Route path="/hospital-registration" element={<HospitalRegistration />} />
-        <Route path="/donor-registration" element={<DonorRegistration />} />
+    // <Router>
+    //   <Routes>
+    //     {/* Public Routes */}
+    //     <Route path="/" element={<AppLayout><Hero /></AppLayout>} />
+    //     <Route path="/login" element={<AppLayout><Login /></AppLayout>} />
+    //     <Route path="/forgot-password" element={<ForgotPassword />} />
+    //     <Route path="/signup" element={<AppLayout><SignUpPage /></AppLayout>} />
+    //     <Route path="/hospital-registration" element={<HospitalRegistration />} />
+    //     <Route path="/donor-registration" element={<DonorRegistration />} />
 
-        {/* Protected Routes */}
-        {/* Hospital Routes */}
-        <Route
-          path="/hospital-dashboard"
-          element={
-            <ProtectedRoute requiredRole={1}>
-              <HospitalLayout><HospitalInfo /></HospitalLayout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/edit-profile"
-          element={
-            <ProtectedRoute requiredRole={1}>
-              <HospitalLayout><HospitalEditProfile /></HospitalLayout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/view-rating"
-          element={
-            <ProtectedRoute requiredRole={1}>
-              <HospitalLayout><ViewRating /></HospitalLayout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/view-reviews"
-          element={
-            <ProtectedRoute requiredRole={1}>
-              <HospitalLayout><Reviews /></HospitalLayout>
-            </ProtectedRoute>
-          }
-        />
+    //     {/* Protected Routes */}
+    //     {/* Hospital Routes */}
+    //     <Route
+    //       path="/hospital-dashboard"
+    //       element={
+    //         <ProtectedRoute requiredRole={1}>
+    //           <HospitalLayout><HospitalInfo /></HospitalLayout>
+    //         </ProtectedRoute>
+    //       }
+    //     />
+    //     <Route
+    //       path="/edit-profile"
+    //       element={
+    //         <ProtectedRoute requiredRole={1}>
+    //           <HospitalLayout><HospitalEditProfile /></HospitalLayout>
+    //         </ProtectedRoute>
+    //       }
+    //     />
+    //     <Route
+    //       path="/view-rating"
+    //       element={
+    //         <ProtectedRoute requiredRole={1}>
+    //           <HospitalLayout><ViewRating /></HospitalLayout>
+    //         </ProtectedRoute>
+    //       }
+    //     />
+    //     <Route
+    //       path="/view-reviews"
+    //       element={
+    //         <ProtectedRoute requiredRole={1}>
+    //           <HospitalLayout><Reviews /></HospitalLayout>
+    //         </ProtectedRoute>
+    //       }
+    //     />
 
-        {/* Donor Routes */}
-        <Route
-          path="/donor-dashboard"
-          element={
-            <ProtectedRoute requiredRole={2}>
-              <DonationHistory />
-            </ProtectedRoute>
-          }
-        />
-            <Route
-          path="/Give-rating"
-          element={
-            <ProtectedRoute requiredRole={2}>
-              <GiveRating />
-            </ProtectedRoute>
-          }
-        />
-         <Route
-          path="/Pulse-Verified-Hospitals"
-          element={
-            <ProtectedRoute requiredRole={2}>
-              <HospitalCards />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-    </Router>
+    //     {/* Donor Routes */}
+    //     <Route
+    //       path="/donor-dashboard"
+    //       element={
+    //         <ProtectedRoute requiredRole={2}>
+    //           <DonationHistory />
+    //         </ProtectedRoute>
+    //       }
+    //     />
+    //         <Route
+    //       path="/Give-rating"
+    //       element={
+    //         <ProtectedRoute requiredRole={2}>
+    //           <GiveRating />
+    //         </ProtectedRoute>
+    //       }
+    //     />
+    //      <Route
+    //       path="/Pulse-Verified-Hospitals"
+    //       element={
+    //         <ProtectedRoute requiredRole={2}>
+    //           <HospitalCards />
+    //         </ProtectedRoute>
+    //       }
+    //     />
+    //   </Routes>
+    // </Router>
   );
 }
 

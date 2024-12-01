@@ -5,6 +5,8 @@ import heditReducer from './src/features/heditSlice';
 import ratingReducer from "./src/features/ratingslice";
 import hospitalReducer from "./src/features/hospitalSlice";
 import donorReducer from "./src/features/DonorSlice";
+//above are the reducers of 
+
 const store = configureStore({
   reducer: {
     auth: authReducer, // Add the auth slice reducer here

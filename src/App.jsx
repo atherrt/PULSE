@@ -19,15 +19,18 @@ import DonationHistory from "./userdashboard/components/udonationshistory.jsx";
 import HospitalCards from "./userdashboard/components/viewpulsehospitals.jsx";
 import GiveRating from "./userdashboard/components/giverating.jsx";
 import ForgotPassword from "./components/Forgot-Password/ForgotPassword.jsx";
+import ResetPassword from "./components/Reset-Password/resetPassword.jsx";
+
 function App() {
   return (
-    
+       
     <Router>
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<AppLayout><Hero /></AppLayout>} />
         <Route path="/login" element={<AppLayout><Login /></AppLayout>} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/Reset-password" element={<AppLayout><ResetPassword /></AppLayout>} />
         <Route path="/signup" element={<AppLayout><SignUpPage /></AppLayout>} />
         <Route path="/hospital-registration" element={<HospitalRegistration />} />
         <Route path="/donor-registration" element={<DonorRegistration />} />

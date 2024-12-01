@@ -7,6 +7,7 @@ import hospitalReducer from "./src/features/hospitalSlice";
 import donorReducer from "./src/features/DonorSlice";
 import viewHospitalReducer from './src/features/viewhopitalSlice';
 import giveratingReducer from './src/features/giveratingSlice';
+import passwordReducer from "./src/features/resetpasswordSlice";
 //above are the reducers of 
 
 const store = configureStore({
@@ -19,6 +20,7 @@ const store = configureStore({
     donor: donorReducer,
     giverating: giveratingReducer,
     viewhospital: viewHospitalReducer,
+    password: passwordReducer
       
   },
 });

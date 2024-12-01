@@ -5,6 +5,8 @@ import heditReducer from './src/features/heditSlice';
 import ratingReducer from "./src/features/ratingslice";
 import hospitalReducer from "./src/features/hospitalSlice";
 import donorReducer from "./src/features/DonorSlice";
+import viewHospitalReducer from './src/features/viewhopitalSlice';
+import giveratingReducer from './src/features/giveratingSlice';
 //above are the reducers of 
 
 const store = configureStore({
@@ -15,7 +17,8 @@ const store = configureStore({
     ratings: ratingReducer,
     hospital: hospitalReducer,
     donor: donorReducer,
-
+    giverating: giveratingReducer,
+    viewhospital: viewHospitalReducer,
       
   },
 });

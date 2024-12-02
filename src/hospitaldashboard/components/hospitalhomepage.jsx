@@ -1,18 +1,22 @@
 import React, { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchHospitalInfo, selectHospitalInfo } from "../../features/hospitalinfoSlice";
-import { useParams } from "react-router-dom";  // Assuming you're using React Router to get hospitalId from URL
 
 const HospitalInfo = () => {
   const dispatch = useDispatch();
-  const { hospitalId } = useParams(); // Fetch hospitalId from URL params
+  const location = useLocation(); // Access the location object to retrieve passed state
+  const { hospitalId } = location.state || {}; // Get the hospitalId from the passed state
+  
   const { data: hospitalInfo, loading, error } = useSelector(selectHospitalInfo);
 
   useEffect(() => {
     if (hospitalId) {
-      dispatch(fetchHospitalInfo(hospitalId)); // Pass the hospitalId when dispatching the fetch action
+      dispatch(fetchHospitalInfo(hospitalId)); // Pass the hospitalId to the thunk action
+    } else {
+      console.error("Hospital ID not found in location state.");
     }
-  }, [dispatch, hospitalId]);
+  }, [hospitalId, dispatch]); // Only rerun effect if hospitalId changes
 
   if (loading) {
     return (

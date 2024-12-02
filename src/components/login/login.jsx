@@ -6,8 +6,8 @@ import { login, clearState } from "../../features/authSlice"; // Adjust the path
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate(); // For navigating after successful login
-  const { isLoading, error, success, user, roleId } = useSelector((state) => state.auth); // Access user and roleId from auth
-  console.log(roleId);
+  const { isLoading, error, success, user, roleId, hospitalId, patientId } = useSelector((state) => state.auth); // Access user, roleId, hospitalId, and patientId from auth
+
   const [UsernameOrEmail, setUsernameOrEmail] = useState(""); // Match field name
   const [password, setPassword] = useState("");
 
@@ -21,15 +21,17 @@ const Login = () => {
     if (success) {
       // Redirect based on the roleId (roleId should be set in the response)
       if (roleId === 1) {
-        navigate("/hospital-dashboard"); // Redirect to hospital dashboard if roleId is 1
+        // Pass both hospitalId and patientId as state for hospital
+        navigate("/hospital-dashboard", { state: { hospitalId, patientId } });
       } else if (roleId === 2) {
-        navigate("/donor-dashboard"); // Redirect to donor dashboard if roleId is 2
+        // Pass both hospitalId and patientId as state for donor
+        navigate("/donor-dashboard", { state: { hospitalId, patientId } });
       } else {
         navigate("/"); // Default route if role is not recognized
       }
       dispatch(clearState()); // Clear success and error states
     }
-  }, [success, roleId, dispatch, navigate]);
+  }, [success, roleId, hospitalId, patientId, dispatch, navigate]);
 
   return (
     <div className="bg-red-100 min-h-screen flex flex-col">

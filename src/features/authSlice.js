@@ -1,40 +1,40 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const API_URL = 'https://b843-2400-adc5-43c-4600-b1b1-7f8d-bfeb-7e0e.ngrok-free.app/api/auth';
+const API_URL = 'https://58b4-2400-adc5-43c-4600-507e-c44-a623-bf6.ngrok-free.app/api/auth';
 
-// Login action
-// Login action
 // Login action
 export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI) => {
   try {
     const response = await axios.post(`${API_URL}/login`, {
-      UsernameOrEmail: credentials.UsernameOrEmail, 
-      password: credentials.password,             
+      UsernameOrEmail: credentials.UsernameOrEmail,
+      password: credentials.password,
     });
 
     console.log("Response data:", response.data); // Log the full response to inspect the structure
 
     // Destructure the necessary data from the response
-    const {paitentId}=response.data;
-    console.log(paitentId);
-    const { userId, roleId, email, token } = response.data.data.response ||{} ; // Access data from 'data' field in response
-  console.log(roleId);
-    // If token is present, save it in localStorage
+    const { hospitalId, patientId } = response.data.data;
+    const { userId, roleId, email, token } = response.data.data.response || {};
+   console.log(hospitalId);
+    if (hospitalId) {
+      localStorage.setItem('hospitalId', hospitalId); // Save hospitalId to localStorage
+    }
+    if (patientId) {
+      localStorage.setItem('patientId', patientId); // Save patientId to localStorage
+    }
     if (token) {
       localStorage.setItem('token', token);
-      localStorage.setItem('roleId', roleId); // Save roleId to localStorage
+      localStorage.setItem('roleId', roleId);
+      localStorage.setItem('userId', userId);
     }
-  
-    return { userId, roleId, email, token }; // Return the required data
+
+    return { userId, roleId, email, token, hospitalId, patientId }; // Return all required data
   } catch (error) {
     console.error("Login error:", error.response?.data || error.message);
     return thunkAPI.rejectWithValue(error.response?.data || 'An error occurred');
   }
 });
-
-
-
 
 // Register action
 export const register = createAsyncThunk('auth/register', async (registrationData, thunkAPI) => {
@@ -42,13 +42,21 @@ export const register = createAsyncThunk('auth/register', async (registrationDat
     const response = await axios.post(`${API_URL}/signupWithEmail`, registrationData);
     console.log("Response data:", response.data);
 
-    const { token, email, fullName, userId, roleId } = response.data.response; // Access response from data
+    const { token, email, fullName, userId, roleId, hospitalId, patientId } = response.data.response;
+
+    if (hospitalId) {
+      localStorage.setItem('hospitalId', hospitalId); // Save hospitalId to localStorage
+    }
+    if (patientId) {
+      localStorage.setItem('patientId', patientId); // Save patientId to localStorage
+    }
     if (token) {
-      localStorage.setItem('token', token); // Save token to localStorage
-      localStorage.setItem('roleId', roleId); // Save roleId to localStorage
+      localStorage.setItem('token', token);
+      localStorage.setItem('roleId', roleId);
+      localStorage.setItem('userId', userId);
     }
 
-    return { token, email, fullName, userId, roleId }; // Include roleId
+    return { token, email, fullName, userId, roleId, hospitalId, patientId }; // Include hospitalId and patientId
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response?.data || 'An error occurred');
   }
@@ -57,9 +65,11 @@ export const register = createAsyncThunk('auth/register', async (registrationDat
 // Logout action
 export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
   try {
-    localStorage.removeItem('token'); // Clear token on logout
-    localStorage.removeItem('roleId'); // Clear roleId on logout
-    localStorage.removeItem('userId'); // Clear userId on logout
+    localStorage.removeItem('token');
+    localStorage.removeItem('roleId');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('hospitalId'); // Clear hospitalId on logout
+    localStorage.removeItem('patientId'); // Clear patientId on logout
     return true;
   } catch (error) {
     return thunkAPI.rejectWithValue('An error occurred during logout');
@@ -70,14 +80,16 @@ export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    user: null, // Stores user info
-    isLoading: false, // Tracks loading state
-    error: null, // Stores error messages
-    success: false, // Tracks success state
-    token: localStorage.getItem('token') || null, // Persist token
-    userId: localStorage.getItem('userId') || null, // Persist userId
-    role: localStorage.getItem('role') || null, // Persist role
-    roleId: localStorage.getItem('roleId') || null, // Persist roleId
+    user: null,
+    isLoading: false,
+    error: null,
+    success: false,
+    token: localStorage.getItem('token') || null,
+    userId: localStorage.getItem('userId') || null,
+    role: localStorage.getItem('role') || null,
+    roleId: localStorage.getItem('roleId') || null,
+    hospitalId: localStorage.getItem('hospitalId') || null, // Persist hospitalId
+    patientId: localStorage.getItem('patientId') || null, // Persist patientId
   },
   reducers: {
     clearState: (state) => {
@@ -86,18 +98,16 @@ const authSlice = createSlice({
       state.error = null;
       state.success = false;
       state.token = null;
-      state.userId = null; // Clear userId
-      state.role = null; // Clear role
-      state.roleId = null; // Clear roleId
-      localStorage.removeItem('token'); // Clear token
-      localStorage.removeItem('role'); // Clear role
-      localStorage.removeItem('roleId'); // Clear roleId
-      localStorage.removeItem('userId'); // Clear userId
+      state.userId = null;
+      state.role = null;
+      state.roleId = null;
+      state.hospitalId = null; // Clear hospitalId
+      state.patientId = null; // Clear patientId
+      localStorage.clear(); // Clear all localStorage items
     },
   },
   extraReducers: (builder) => {
     builder
-      // Login cases
       .addCase(login.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -108,15 +118,13 @@ const authSlice = createSlice({
         state.user = {
           email: action.payload.email,
           fullName: action.payload.fullName,
-        }; // Save user info
-        state.token = action.payload.token; // Save JWT token
-        state.userId = action.payload.userId; // Save userId
-        state.role = action.payload.role; // Save role
-        state.roleId = action.payload.roleId; // Save roleId
-        localStorage.setItem('token', action.payload.token); // Save token
-        localStorage.setItem('role', action.payload.role); // Save role
-        localStorage.setItem('roleId', action.payload.roleId); // Save roleId
-        localStorage.setItem('userId', action.payload.userId); // Save userId
+        };
+        state.token = action.payload.token;
+        state.userId = action.payload.userId;
+        state.role = action.payload.role;
+        state.roleId = action.payload.roleId;
+        state.hospitalId = action.payload.hospitalId; // Save hospitalId
+        state.patientId = action.payload.patientId; // Save patientId
         state.success = true;
       })
       .addCase(login.rejected, (state, action) => {
@@ -124,8 +132,6 @@ const authSlice = createSlice({
         state.error = action.payload;
         state.success = false;
       })
-
-      // Register cases
       .addCase(register.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -133,33 +139,31 @@ const authSlice = createSlice({
       })
       .addCase(register.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.success = true; // Registration successful
-        state.token = action.payload.token; // Save token
+        state.success = true;
+        state.token = action.payload.token;
         state.user = {
           email: action.payload.email,
           fullName: action.payload.fullName,
-        }; // Save user info
-        state.userId = action.payload.userId; // Save userId
-        state.role = action.payload.role; // Save role
-        state.roleId = action.payload.roleId; // Save roleId
-        localStorage.setItem('token', action.payload.token); // Save token
-        localStorage.setItem('role', action.payload.role); // Save role
-        localStorage.setItem('roleId', action.payload.roleId); // Save roleId
-        localStorage.setItem('userId', action.payload.userId); // Save userId
+        };
+        state.userId = action.payload.userId;
+        state.role = action.payload.role;
+        state.roleId = action.payload.roleId;
+        state.hospitalId = action.payload.hospitalId; // Save hospitalId
+        state.patientId = action.payload.patientId; // Save patientId
       })
       .addCase(register.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
         state.success = false;
       })
-
-      // Logout cases
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
         state.token = null;
-        state.userId = null; // Clear userId
-        state.role = null; // Clear role
-        state.roleId = null; // Clear roleId
+        state.userId = null;
+        state.role = null;
+        state.roleId = null;
+        state.hospitalId = null; // Clear hospitalId
+        state.patientId = null; // Clear patientId
         state.success = false;
       });
   },

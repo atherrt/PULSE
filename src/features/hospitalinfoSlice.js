@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // Replace with your actual backend URL
-const BACKEND_URL = "https://58b4-2400-adc5-43c-4600-507e-c44-a623-bf6.ngrok-free.app/api/hospital";
+const BACKEND_URL = "https://2112-103-207-87-227.ngrok-free.app/api/hospital";
 
 // Thunk to fetch hospital information based on hospitalId
 export const fetchHospitalInfo = createAsyncThunk(

@@ -1,29 +1,36 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-// Dummy data to simulate API responses
-const dummyHospitalData = [
-  { id: 1, name: 'Hospital A' },
-  { id: 2, name: 'Hospital B' },
-  { id: 3, name: 'Hospital C' },
-];
-
-// Fetch hospitals that the user has donated to
+// Fetch hospitals from json-server (backend)
 export const fetchUserHospitals = createAsyncThunk(
   'giverating/fetchUserHospitals',
   async () => {
-    return new Promise((resolve) => {
-      setTimeout(() => resolve(dummyHospitalData), 1000);
-    });
+    const response = await fetch('http://localhost:5000/hospitals'); // Your json-server endpoint
+    if (!response.ok) {
+      throw new Error('Failed to fetch hospitals');
+    }
+    return response.json(); // Parse the JSON response
   }
 );
 
-// Submit rating and review to the backend
+// Submit rating and review to json-server
 export const submitHospitalRating = createAsyncThunk(
   'giverating/submitHospitalRating',
-  async (ratingData) => {
-    return new Promise((resolve) => {
-      setTimeout(() => resolve({ status: 'success', data: ratingData }), 1000);
+  async ({ hospitalId, rating, review }) => {
+    // Create the new rating data
+    const ratingData = { hospitalId, rating, review };
+
+    const response = await fetch(`http://localhost:5000/hospitals/{id}/ratings`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(ratingData),
     });
+
+    if (!response.ok) {
+      throw new Error('Failed to submit rating');
+    }
+    return response.json(); // Return the response data
   }
 );
 
@@ -56,11 +63,12 @@ const giveratingSlice = createSlice({
       .addCase(submitHospitalRating.pending, (state) => {
         state.submissionStatus = 'loading';
       })
-      .addCase(submitHospitalRating.fulfilled, (state, action) => {
+      .addCase(submitHospitalRating.fulfilled, (state) => {
         state.submissionStatus = 'success';
       })
       .addCase(submitHospitalRating.rejected, (state, action) => {
         state.submissionStatus = 'error';
+        state.error = action.error.message;
       });
   },
 });

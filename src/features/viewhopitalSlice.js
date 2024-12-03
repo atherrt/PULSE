@@ -1,28 +1,17 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-// Dummy data to simulate API response
-const dummyData = [
-  {
-    id: 1,
-    name: 'JINNAH HOSPITAL',
-    address: 'ABC Hospital Building, XYZ Road, Place, District Pincode',
-    status: 'SUCCESS',
-  },
-  {
-    id: 2,
-    name: 'JINNAH HOSPITAL',
-    address: 'ABC Hospital Building, XYZ Road, Place, District Pincode',
-    status: 'SUCCESS',
-  },
-];
-
-// Async thunk to simulate API call
-export const fetchViewHospital = createAsyncThunk('viewhospital/fetchViewHospital', async () => {
-  // Simulating API call with dummy data
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(dummyData), 1000);
-  });
-});
+// Async thunk to fetch hospital data from the API (json-server)
+export const fetchViewHospital = createAsyncThunk(
+  'viewhospital/fetchViewHospital',
+  async () => {
+    const response = await fetch('http://localhost:5000/hospitals'); // URL to your json-server endpoint
+    if (!response.ok) {
+      throw new Error('Failed to fetch hospital data');
+    }
+    const data = await response.json(); // Parse the JSON response
+    return data;
+  }
+);
 
 const viewHospitalSlice = createSlice({
   name: 'viewhospital',
@@ -36,14 +25,15 @@ const viewHospitalSlice = createSlice({
     builder
       .addCase(fetchViewHospital.pending, (state) => {
         state.loading = true;
+        state.error = null; // Clear any previous errors
       })
       .addCase(fetchViewHospital.fulfilled, (state, action) => {
         state.loading = false;
-        state.hospitals = action.payload;
+        state.hospitals = action.payload; // Update the state with fetched data
       })
       .addCase(fetchViewHospital.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.error.message; // Handle any error
       });
   },
 });

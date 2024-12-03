@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { registerHospital } from "../../features/hospitalSlice";
 
 const HospitalRegistration = () => {
@@ -8,13 +8,15 @@ const HospitalRegistration = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Retrieve userId and email from the navigation state
-  const { userId ,username} = location.state || {};
+  // Retrieve userId and username from the navigation state
+  const { userId, username } = location.state || {};
   console.log(userId);
+
+  // State to hold form data
   const [formData, setFormData] = useState({
     userId: userId || 0, // Default userId is set to 0 if not passed
     roleId: 1, // Default roleId is set to 1
-    fullName: username,
+    fullName: username || "", // Owner's name (username)
     phoneNumber: "",
     emergencyContact: "",
     address: "",
@@ -22,8 +24,10 @@ const HospitalRegistration = () => {
     websiteURL: "",
     licenseNumber: "",
     licenseExpiryDate: "",
-
   });
+
+  // Get loading and error states from Redux store
+  const { loading, error } = useSelector((state) => state.hospital);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -33,19 +37,15 @@ const HospitalRegistration = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // // Validate required fields
-    // if (!formData.hospitalName || !formData.ownerName || !formData.email) {
-    //   alert("Please fill in all required fields.");
-    //   return;
-    // }
-
-    // Dispatch hospital registration with userId and roleId included
+    // Prepare hospital data for dispatch
     const hospitalData = { ...formData, userId, roleId: 1 }; // Ensure roleId is passed
     dispatch(registerHospital(hospitalData));
-
-    // Navigate to the dashboard after registration
-    navigate("/");
   };
+
+  // Handle success after registration
+  if (!loading && !error && formData.hospitalName) {
+    navigate("/dashboard");  // Redirect to the dashboard after successful registration
+  }
 
   return (
     <div className="flex items-center justify-center h-screen bg-rose-200">
@@ -53,6 +53,10 @@ const HospitalRegistration = () => {
         <h2 className="text-2xl font-bold text-gray-700 mb-6">
           Hospital Registration
         </h2>
+        
+        {loading && <div className="text-center text-xl text-gray-600">Loading...</div>}
+        {error && <div className="text-center text-red-600">{error}</div>}
+
         <form className="grid grid-cols-2 gap-6" onSubmit={handleSubmit}>
           {/* Owner Name */}
           <div>
@@ -115,9 +119,6 @@ const HospitalRegistration = () => {
               placeholder="Enter emergency contact"
             />
           </div>
-
-        
-         
 
           {/* Address */}
           <div>

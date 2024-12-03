@@ -59,17 +59,17 @@ function App() {
         <Route
           path="/view-rating"
           element={
-            <ProtectedRoute requiredRole={1}>
-              <HospitalLayout><ViewRating /></HospitalLayout>
-            </ProtectedRoute>
+            // <ProtectedRoute requiredRole={1}>
+              <HospitalLayout><BloodInventory/></HospitalLayout>
+            // </ProtectedRoute>
           }
         />
         <Route
           path="/view-reviews"
           element={
-            <ProtectedRoute requiredRole={1}>
+            // <ProtectedRoute requiredRole={1}>
               <HospitalLayout><Reviews /></HospitalLayout>
-            </ProtectedRoute>
+            // </ProtectedRoute>
           }
         />
 
@@ -85,17 +85,17 @@ function App() {
             <Route
           path="/Give-rating"
           element={
-            <ProtectedRoute requiredRole={2}>
+           // <ProtectedRoute requiredRole={2}>
               <GiveRating />
-            </ProtectedRoute>
+            //</ProtectedRoute>
           }
         />
          <Route
           path="/Pulse-Verified-Hospitals"
           element={
-            <ProtectedRoute requiredRole={2}>
+            // <ProtectedRoute requiredRole={2}>
               <HospitalCards />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           }
         />
       </Routes>

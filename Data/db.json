@@ -1,0 +1,100 @@
+{
+    "users": [
+      {
+        "id": 1,
+        "username": "john_doe",
+        "email": "john.doe@example.com",
+        "password": "password123",
+        "roleId": 1,
+        "hospitalId": 101,
+        "patientId": 501
+      },
+      {
+        "id": 2,
+        "username": "jane_doe",
+        "email": "jane.doe@example.com",
+        "password": "password456",
+        "roleId": 2,
+        "hospitalId": 102,
+        "patientId": 502
+      },
+      {
+        "id": "9342",
+        "username": "Hassan",
+        "email": "hjamshaid81@gmail.com",
+        "password": "1",
+        "roleId": 3,
+        "hospitalId": 0,
+        "patientId": 0
+      },
+      {
+        "id": "c18a",
+        "username": "Hassan",
+        "email": "test@email.com",
+        "password": "123",
+        "roleId": 1,
+        "hospitalId": 101
+      }
+    ],
+    "hospitals": [
+      {
+        "id": 101,
+        "name": "City Hospital",
+        "address": "123 Main St, Cityville",
+        "contact": "123-456-7890",
+        "email": "contact@cityhospital.com",
+        "specialties": ["Cardiology", "Neurology"],
+        "websiteURL": "https://cityhospital.com",
+        "licenseNumber": "12345",
+        "licenseExpiryDate": "2025-12-31",
+        "ratings": [
+          {
+            "userId": 1,
+            "rating": 4,
+            "comment": "Great service, friendly staff."
+          },
+          {
+            "userId": 2,
+            "rating": 5,
+            "comment": "Amazing experience, would recommend!"
+          }
+        ]
+      },
+      {
+        "id": 102,
+        "name": "Green Valley Hospital",
+        "address": "456 Oak Rd, Greenfield",
+        "contact": "987-654-3210",
+        "email": "info@greenvalleyhospital.com",
+        "specialties": ["Orthopedics", "Pediatrics"],
+        "websiteURL": "https://greenvalleyhospital.com",
+        "licenseNumber": "67890",
+        "licenseExpiryDate": "2024-06-15",
+        "ratings": [
+          {
+            "userId": 2,
+            "rating": 3,
+            "comment": "Decent hospital, could improve on staff responsiveness."
+          }
+        ]
+      }
+    ],
+        "reviews": [
+          { "id": 1, "hospital": "City Hospital", "rating": 4.5, "review": "Great service!" },
+          { "id": 2, "hospital": "City Hospital", "rating": 3.8, "review": "Good experience overall." },
+          { "id": 3, "hospital": "General Hospital", "rating": 4.0, "review": "Friendly staff, clean environment." },
+          { "id": 4, "hospital": "City Hospital", "rating": 5.0, "review": "Excellent care and facilities!" },
+          { "id": 5, "hospital": "General Hospital", "rating": 3.0, "review": "Could improve waiting times." }
+        ]  , 
+        "bloodInventory": [
+    { "group": "A+", "bottles": 25 },
+    { "group": "A-", "bottles": 12 },
+    { "group": "B+", "bottles": 20 },
+    { "group": "B-", "bottles": 10 },
+    { "group": "O+", "bottles": 30 },
+    { "group": "O-", "bottles": 15 },
+    { "group": "AB+", "bottles": 8 },
+    { "group": "AB-", "bottles": 5 }
+  ]
+  }
+  

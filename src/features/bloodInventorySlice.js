@@ -1,23 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-// Simulating an API call to fetch blood inventory data
+// Fetch blood inventory data from the json-server API
 export const fetchBloodInventory = createAsyncThunk(
   'bloodInventory/fetchBloodInventory',
   async () => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve([
-          { group: "A+", bottles: 25 },
-          { group: "A-", bottles: 12 },
-          { group: "B+", bottles: 20 },
-          { group: "B-", bottles: 10 },
-          { group: "O+", bottles: 30 },
-          { group: "O-", bottles: 15 },
-          { group: "AB+", bottles: 8 },
-          { group: "AB-", bottles: 5 },
-        ]);
-      }, 1000); // Simulating API delay
-    });
+    const response = await fetch('http://localhost:5000/bloodInventory');
+    const data = await response.json();
+    return data;
   }
 );
 

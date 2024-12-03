@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { login, clearState } from "../../features/authSlice"; // Adjust the path based on your project structure
+import { login, clearState, logout } from "../../features/authSlice"; // Adjust the path based on your project structure
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate(); // For navigating after successful login
-  const { isLoading, error, success, user, roleId, hospitalId, patientId } = useSelector((state) => state.auth); // Access user, roleId, hospitalId, and patientId from auth
+  const { isLoading, error, success, roleId, hospitalId, patientId, user } = useSelector((state) => state.auth); // Access state from auth
 
   const [UsernameOrEmail, setUsernameOrEmail] = useState(""); // Match field name
   const [password, setPassword] = useState("");
@@ -21,10 +21,8 @@ const Login = () => {
     if (success) {
       // Redirect based on the roleId (roleId should be set in the response)
       if (roleId === 1) {
-        // Pass both hospitalId and patientId as state for hospital
         navigate("/hospital-dashboard", { state: { hospitalId, patientId } });
       } else if (roleId === 2) {
-        // Pass both hospitalId and patientId as state for donor
         navigate("/donor-dashboard", { state: { hospitalId, patientId } });
       } else {
         navigate("/"); // Default route if role is not recognized
@@ -33,6 +31,11 @@ const Login = () => {
       dispatch(clearState()); // Clear success and error states after login
     }
   }, [success, roleId, hospitalId, patientId, dispatch, navigate]);
+
+  const handleLogout = () => {
+    dispatch(logout()); // Dispatch logout action to clear user data
+    navigate("/"); // Redirect to the homepage or login page
+  };
 
   return (
     <div className="bg-red-100 min-h-screen flex flex-col">
@@ -113,6 +116,17 @@ const Login = () => {
               Sign up
             </Link>
           </div>
+
+          {user && (
+            <div className="mt-6 text-center">
+              <button
+                onClick={handleLogout}
+                className="text-red-500 hover:text-red-700 font-medium"
+              >
+                Log Out
+              </button>
+            </div>
+          )}
         </div>
       </main>
     </div>

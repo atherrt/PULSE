@@ -1,36 +1,30 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-// Dummy data for testing
-const dummyData = [
-  { id: 1, hospital: "City Hospital", rating: 4.5, review: "Great service!" },
-  { id: 2, hospital: "City Hospital", rating: 3.8, review: "Good experience overall." },
-  { id: 3, hospital: "General Hospital", rating: 4.0, review: "Friendly staff, clean environment." },
-  { id: 4, hospital: "City Hospital", rating: 5.0, review: "Excellent care and facilities!" },
-  { id: 5, hospital: "General Hospital", rating: 3.0, review: "Could improve waiting times." },
-];
+// Fetch hospitals and reviews from db.json
+export const fetchReviews = createAsyncThunk("ratings/fetchReviews", async () => {
+  // Fetch hospitals and reviews from the db.json API
+  const responseHospitals = await fetch("http://localhost:5000/hospitals");
+  const responseReviews = await fetch("http://localhost:5000/reviews");
 
-// Async thunk to simulate fetching reviews from an API
-export const fetchReviews = createAsyncThunk(
-  "ratings/fetchReviews",
-  async (hospitalName = null) => {
-    // Simulate API delay and response
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        if (hospitalName) {
-          resolve(dummyData.filter((review) => review.hospital === hospitalName)); // Filter by hospital
-        } else {
-          resolve(dummyData); // Return all reviews if no hospital is specified
-        }
-      }, 1000);
-    });
-  }
-);
+  const hospitals = await responseHospitals.json();
+  const reviews = await responseReviews.json();
+
+  // Combine reviews with their corresponding hospitals based on hospitalId
+  const hospitalReviews = hospitals.map((hospital) => {
+    const hospitalRatings = reviews.filter((review) => review.hospital === hospital.name);
+    return {
+      hospital: hospital.name,
+      ratings: hospitalRatings,
+    };
+  });
+
+  return hospitalReviews;
+});
 
 const ratingSlice = createSlice({
   name: "ratings",
   initialState: {
-    reviews: [], // List of reviews fetched
-    rating: null, // Overall rating (calculated)
+    hospitalReviews: [], // List of hospital reviews
     loading: false, // Loading state
     error: null, // Error state
   },
@@ -43,12 +37,7 @@ const ratingSlice = createSlice({
       })
       .addCase(fetchReviews.fulfilled, (state, action) => {
         state.loading = false;
-        state.reviews = action.payload;
-
-        // Calculate overall rating
-        const ratings = action.payload.map((review) => review.rating);
-        state.rating =
-          ratings.reduce((acc, val) => acc + val, 0) / ratings.length || 0;
+        state.hospitalReviews = action.payload;
       })
       .addCase(fetchReviews.rejected, (state, action) => {
         state.loading = false;

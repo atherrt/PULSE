@@ -1,20 +1,26 @@
-// src/features/hospitalSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
 
-// Async thunk to handle hospital registration API call
+// Async thunk to handle hospital registration
 export const registerHospital = createAsyncThunk(
-  'hospital/register',
+  'hospital/registerHospital',
   async (hospitalData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        'https://2112-103-207-87-227.ngrok-free.app/api/auth/registerAsHospital',
-        hospitalData
-      );
-      console.log(response.data);
-      return response.data; // Return the full response data
+      const response = await fetch('http://localhost:5000/hospitals', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(hospitalData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to register hospital');
+      }
+
+      const data = await response.json();
+      return data; // Return the hospital data
     } catch (error) {
-      return rejectWithValue(error.response.data); // If there's an error, return the error message
+      return rejectWithValue(error.message); // Return error message if failure occurs
     }
   }
 );
@@ -22,26 +28,24 @@ export const registerHospital = createAsyncThunk(
 const hospitalSlice = createSlice({
   name: 'hospital',
   initialState: {
-    hospital: null,
+    hospitals: [],
     loading: false,
     error: null,
-    role: 1,  // Set default role as '1' for hospital
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(registerHospital.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(registerHospital.fulfilled, (state, action) => {
         state.loading = false;
-        state.hospital = action.payload;  // Store the response data
-        // Ensure the role is set as '1' (Hospital)
-        state.role = 1;  
+        state.hospitals.push(action.payload); // Add the newly registered hospital to the list
       })
       .addCase(registerHospital.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;  // Store the error message
+        state.error = action.payload;
       });
   },
 });

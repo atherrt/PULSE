@@ -1,10 +1,18 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { saveAuthData, clearAuthData } from './authdata'; // Import utility functions
 
-const API_URL = 'https://3018-2400-adc5-43c-4600-507e-c44-a623-bf6.ngrok-free.app/api/auth';
+const API_URL = 'https://2112-103-207-87-227.ngrok-free.app/api/auth';
 
-// Login action
+// Function to load data from localStorage
+const loadUserFromLocalStorage = () => {
+  const user = localStorage.getItem('user');
+  if (user) {
+    return JSON.parse(user);
+  }
+  return null;
+};
+
+// Async actions
 export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI) => {
   try {
     const response = await axios.post(`${API_URL}/login`, {
@@ -12,45 +20,40 @@ export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI
       password: credentials.password,
     });
 
-    console.log('Response data:', response.data); // Log response for debugging
+    const { hospitalId, patientId } = response.data;
+    const { userId, roleId, email, token, fullName } = response.data.data.response || {};
 
-    // Extract necessary data from the response
-    const { hospitalId, patientId } = response.data.data;
-    const { userId, roleId, email, token } = response.data.data.response || {};
+    // Save user data in localStorage
+    const userData = { userId, roleId, email, token, fullName, hospitalId, patientId };
+    localStorage.setItem('user', JSON.stringify(userData));
 
-    // Save authentication data to localStorage
-    saveAuthData({ token, roleId, userId, hospitalId, patientId });
-
-    
-    return { userId, roleId, email, token, hospitalId, patientId };
+    return userData;
   } catch (error) {
     console.error('Login error:', error.response?.data || error.message);
     return thunkAPI.rejectWithValue(error.response?.data || 'An error occurred');
   }
 });
 
-// Register action
 export const register = createAsyncThunk('auth/register', async (registrationData, thunkAPI) => {
   try {
     const response = await axios.post(`${API_URL}/signupWithEmail`, registrationData);
-    console.log('Response data:', response.data);
 
     const { token, email, fullName, userId, roleId, hospitalId, patientId } = response.data.response;
 
-    // Save registration data to localStorage
-    saveAuthData({ token, roleId, userId, hospitalId, patientId });
+    // Save user data in localStorage
+    const userData = { token, email, fullName, userId, roleId, hospitalId, patientId };
+    localStorage.setItem('user', JSON.stringify(userData));
 
-    return { token, email, fullName, userId, roleId, hospitalId, patientId };
+    return userData;
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response?.data || 'An error occurred');
   }
 });
 
-// Logout action
 export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
   try {
-    // Clear all authentication data from localStorage
-    clearAuthData();
+    // Clear data from localStorage
+    localStorage.removeItem('user');
     return true;
   } catch (error) {
     return thunkAPI.rejectWithValue('An error occurred during logout');
@@ -61,16 +64,15 @@ export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    user: null,
+    user: loadUserFromLocalStorage(),  // Load user from localStorage if available
     isLoading: false,
     error: null,
     success: false,
-    token: localStorage.getItem('token') || null, // Check localStorage for token
-    userId: localStorage.getItem('userId') || null,
-    role: localStorage.getItem('role') || null,
-    roleId: localStorage.getItem('roleId') || null, // Ensure roleId is fetched from localStorage
-    hospitalId: localStorage.getItem('hospitalId') || null,
-    patientId: localStorage.getItem('patientId') || null,
+    token: null,
+    userId: null,
+    roleId: null,
+    hospitalId: null,
+    patientId: null,
   },
   reducers: {
     clearState: (state) => {
@@ -83,7 +85,9 @@ const authSlice = createSlice({
       state.roleId = null;
       state.hospitalId = null;
       state.patientId = null;
-      clearAuthData(); // Clear localStorage
+
+      // Clear from localStorage as well
+      localStorage.removeItem('user');
     },
   },
   extraReducers: (builder) => {
@@ -97,6 +101,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = {
           email: action.payload.email,
+          fullName: action.payload.fullName,
         };
         state.token = action.payload.token;
         state.userId = action.payload.userId;
@@ -117,16 +122,16 @@ const authSlice = createSlice({
       })
       .addCase(register.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.success = true;
-        state.token = action.payload.token;
         state.user = {
           email: action.payload.email,
           fullName: action.payload.fullName,
         };
+        state.token = action.payload.token;
         state.userId = action.payload.userId;
         state.roleId = action.payload.roleId;
         state.hospitalId = action.payload.hospitalId;
         state.patientId = action.payload.patientId;
+        state.success = true;
       })
       .addCase(register.rejected, (state, action) => {
         state.isLoading = false;

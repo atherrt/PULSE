@@ -1,36 +1,23 @@
 import React from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const ProtectedRoute = ({ children, requiredRole }) => {
-  const location = useLocation();
+  // Retrieve authentication data from Redux store
+  const token = useSelector((state) => state.auth.token);
+  const roleId = useSelector((state) => state.auth.roleId);
 
-  console.log(localStorage.getItem("token"));
-console.log(localStorage.getItem("roleId"));
-
-  // Get token and roleId from URL query params
-  const queryParams = new URLSearchParams(location.search);
-  const queryToken = queryParams.get("token");
-  const queryRoleId = queryParams.get("roleId");
-
-  // Get from Redux or fallback to localStorage
-  const reduxRoleId = useSelector((state) => state.auth.roleId);
-  const token = queryToken || localStorage.getItem("token");
-  const roleId = queryRoleId || reduxRoleId || localStorage.getItem("roleId");
-
-  console.log("Token:", token);
-  console.log("Role ID:", roleId);
-
-  // If no token, redirect to login
+  // Check if token exists in Redux state
   if (!token) {
     return <Navigate to="/login" replace />;
   }
 
-  // If role doesn't match, redirect to login
-  if (requiredRole && roleId !== requiredRole) {
+  // If requiredRole is specified, check if role matches
+  if (requiredRole && parseInt(roleId, 10) !== requiredRole) {
     return <Navigate to="/login" replace />;
   }
 
+  // Render children if token is valid and role matches
   return children;
 };
 

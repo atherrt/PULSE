@@ -7,9 +7,13 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { isLoading, error, success, token, roleId, hospitalId, patientId } = useSelector(
+  // Access state from Redux, including roleId initialized from localStorage
+  const { isLoading, error, success, token, roleId,userId,HospitalId,paitentId, userDetails } = useSelector(
     (state) => state.auth
   );
+
+  console.log(roleId);
+
 
   const [UsernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,23 +26,29 @@ const Login = () => {
   // Redirect after successful login
   useEffect(() => {
     if (success && token) {
-      // Navigate based on the roleId
+      // Create a data object to pass via state
+      const dataToPass = { token, roleId, userDetails,userId };
+
+      // Navigate based on roleId and pass the data to the next page
       if (roleId === 1) {
-        navigate("/hospital-dashboard", { state: { hospitalId, patientId } });
+        navigate("/hospital-dashboard", { state: dataToPass });
       } else if (roleId === 2) {
-        navigate("/donor-dashboard", { state: { hospitalId, patientId } });
+        navigate("/donor-dashboard", { state: dataToPass });
       } else {
-        navigate("/"); // Fallback route
+        navigate("/", { state: dataToPass });
       }
-      dispatch(clearState()); // Clear success and error states
+
+      dispatch(clearState()); // Clear success and error states after login
     }
-  }, [success, token, roleId, hospitalId, patientId, navigate, dispatch]);
+  }, [success, token, roleId,HospitalId,paitentId, userDetails, navigate, dispatch]);
 
   return (
     <div className="bg-red-100 min-h-screen flex flex-col">
       <main className="flex-grow flex items-center justify-center">
         <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Sign In</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+            Sign In
+          </h2>
 
           {error && (
             <div className="bg-red-200 text-red-800 text-sm p-2 rounded mb-4">

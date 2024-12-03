@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { register } from "../../features/authSlice";
@@ -6,7 +6,8 @@ import { register } from "../../features/authSlice";
 const SignUpPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isLoading, error, success, userId } = useSelector((state) => state.auth); // Access userId from auth state
+
+  const { isLoading, error, success, userId } = useSelector((state) => state.auth);
 
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -15,8 +16,14 @@ const SignUpPage = () => {
     password: "",
     confirmPassword: "",
     role: "",
-    detailedInfo: {},
   });
+
+  useEffect(() => {
+    if (success && step === 1) {
+      // Move to role selection if registration is successful
+      setStep(2);
+    }
+  }, [success, step]);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -25,6 +32,7 @@ const SignUpPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match!");
       return;
@@ -34,29 +42,21 @@ const SignUpPage = () => {
       username: formData.username,
       email: formData.email,
       password: formData.password,
-      role: formData.role,
-      detailedInfo: formData.detailedInfo,
     };
 
     dispatch(register(registrationData));
-
-    // After registration, move to role selection step
-    setStep(2);
   };
 
   const handleRoleSelection = (role) => {
     setFormData({ ...formData, role });
 
-    // Navigate to different pages based on the selected role
-    if (role === "Hospital") {
-      navigate("/hospital-registration", {
-        state: { userId: userId, role: role }, // Pass userId and role to hospital registration page
-      });
-    } else if (role === "Donor/Receiver") {
-      navigate("/donor-registration", {
-        state: { userId: userId, role: role }, // Pass userId and role to donor registration page
-      });
-    }
+    // Navigate to role-specific registration page
+    const route =
+      role === "Hospital" ? "/hospital-registration" : "/donor-registration";
+
+    navigate(route, {
+      state: { userId, role }, // Pass userId and role to the next page
+    });
   };
 
   const renderSignUpForm = () => (
@@ -65,11 +65,20 @@ const SignUpPage = () => {
         <h2 className="text-2xl font-bold text-gray-700 mb-6">Sign Up</h2>
 
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-        {success && <p className="text-green-500 text-sm mb-4">Registration successful!</p>}
+        {success && (
+          <p className="text-green-500 text-sm mb-4">
+            Registration successful! Proceed to role selection.
+          </p>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
+            <label
+              htmlFor="username"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Username
+            </label>
             <input
               type="text"
               id="username"
@@ -82,7 +91,12 @@ const SignUpPage = () => {
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Email
+            </label>
             <input
               type="email"
               id="email"
@@ -95,7 +109,12 @@ const SignUpPage = () => {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
             <input
               type="password"
               id="password"
@@ -108,7 +127,12 @@ const SignUpPage = () => {
           </div>
 
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
+            <label
+              htmlFor="confirmPassword"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Confirm Password
+            </label>
             <input
               type="password"
               id="confirmPassword"
@@ -123,7 +147,9 @@ const SignUpPage = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full ${isLoading ? "bg-gray-400" : "bg-rose-700 hover:bg-rose-800"} text-white py-2 px-4 rounded-md mt-4`}
+            className={`w-full ${
+              isLoading ? "bg-gray-400" : "bg-rose-700 hover:bg-rose-800"
+            } text-white py-2 px-4 rounded-md mt-4`}
           >
             {isLoading ? "Signing Up..." : "Sign Up"}
           </button>
@@ -152,11 +178,7 @@ const SignUpPage = () => {
     </div>
   );
 
-  if (step === 1) {
-    return renderSignUpForm();
-  } else if (step === 2) {
-    return renderRoleSelection();
-  }
+  return step === 1 ? renderSignUpForm() : renderRoleSelection();
 };
 
 export default SignUpPage;

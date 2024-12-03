@@ -40,9 +40,9 @@ function App() {
         <Route
           path="/hospital-dashboard"
           element={
-              <ProtectedRoute requiredRole={1}>
+              // <ProtectedRoute requiredRole={1}>
               <HospitalLayout><HospitalInfo /></HospitalLayout>
-            </ProtectedRoute>
+            // </ProtectedRoute>
           }
         />
         <Route

@@ -8,7 +8,7 @@ export const registerHospital = createAsyncThunk(
   async (hospitalData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        'https://b843-2400-adc5-43c-4600-b1b1-7f8d-bfeb-7e0e.ngrok-free.app/api/auth/registerAsHospital',
+        'https://2112-103-207-87-227.ngrok-free.app/api/auth/registerAsHospital',
         hospitalData
       );
       console.log(response.data);

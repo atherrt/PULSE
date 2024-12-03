@@ -8,6 +8,9 @@ import donorReducer from "./src/features/DonorSlice";
 import viewHospitalReducer from './src/features/viewhopitalSlice';
 import giveratingReducer from './src/features/giveratingSlice';
 import passwordReducer from "./src/features/resetpasswordSlice";
+import fetchRequestsReducer from './src/features/fetchRequestsSlice';
+import manageBloodBankReducer from './src/features/manageBloodBankSlice';
+import bloodInventoryReducer from './src/features/bloodInventorySlice';
 //above are the reducers of 
 
 const store = configureStore({
@@ -20,7 +23,11 @@ const store = configureStore({
     donor: donorReducer,
     giverating: giveratingReducer,
     viewhospital: viewHospitalReducer,
-    password: passwordReducer
+    password: passwordReducer,
+    requests: fetchRequestsReducer,
+    manageBloodBank: manageBloodBankReducer,
+    bloodInventory: bloodInventoryReducer,
+
       
   },
 });

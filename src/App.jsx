@@ -6,8 +6,7 @@ import HospitalRegistration from "./components/hospital-form/hform";
 import DonorRegistration from "./components/DR-form/drform";
 import AppLayout from "./layouts/al1";
 import HospitalLayout from "./layouts/HospitalLayout.jsx";
-import ProtectedRoute from "./ProtectedRoute.jsx"; // Import ProtectedRoute
-
+import ProtectedRoute from "./ProtectedRoute.jsx"; 
 import UserHeader from "./userdashboard/components/userheader.jsx";
 import UserInfoCard from "./userdashboard/components/userhomepage.jsx";
 import HospitalInfo from "./hospitaldashboard/components/hospitalhomepage";
@@ -60,7 +59,7 @@ function App() {
           path="/view-rating"
           element={
             // <ProtectedRoute requiredRole={1}>
-              <HospitalLayout><BloodInventory/></HospitalLayout>
+              <HospitalLayout><DonationHistory/></HospitalLayout>
             // </ProtectedRoute>
           }
         />
@@ -69,6 +68,14 @@ function App() {
           element={
             // <ProtectedRoute requiredRole={1}>
               <HospitalLayout><Reviews /></HospitalLayout>
+            // </ProtectedRoute>
+          }
+        />
+         <Route
+          path="/view-requests"
+          element={
+            // <ProtectedRoute requiredRole={1}>
+              <HospitalLayout><ViewRequests /></HospitalLayout>
             // </ProtectedRoute>
           }
         />

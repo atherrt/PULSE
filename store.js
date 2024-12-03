@@ -11,6 +11,7 @@ import passwordReducer from "./src/features/resetpasswordSlice";
 import fetchRequestsReducer from './src/features/fetchRequestsSlice';
 import manageBloodBankReducer from './src/features/manageBloodBankSlice';
 import bloodInventoryReducer from './src/features/bloodInventorySlice';
+import donationHistoryReducer from './src/features/Donations';
 //above are the reducers of 
 
 const store = configureStore({
@@ -27,6 +28,7 @@ const store = configureStore({
     requests: fetchRequestsReducer,
     manageBloodBank: manageBloodBankReducer,
     bloodInventory: bloodInventoryReducer,
+    donationHistory: donationHistoryReducer,
 
       
   },

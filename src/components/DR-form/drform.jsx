@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { registerDonor } from "../../features/DonorSlice";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { registerDonor } from "../../features/donorSlice"; // Make sure this matches your file structure
 
 const DonorRegistration = () => {
-  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Retrieve data passed via navigation or localStorage
-  const { username } = location.state || {};
-  
+  // Access the Redux store for user data (assumed that it's stored in `user` object in state)
+  const { userId, username } = useSelector((state) => state.user); // Replace `state.user` with correct path
+  const { loading, error, donor } = useSelector((state) => state.donor);
+
   const [formData, setFormData] = useState({
-    userId: 0, // Will be updated after fetching from localStorage
-    roleId: 2,
-    fullName: username || "",
+    userId: userId || 0, // Get userId from Redux store
+    roleId: 2, // Default role set to 2 for donor
+    fullName: username || "", // Get username from Redux store
     phoneNumber: "",
     emergencyContact: "",
     address: "",
@@ -26,17 +26,6 @@ const DonorRegistration = () => {
     bloodGroupId: 0,
     email: "",
   });
-
-  useEffect(() => {
-    // Fetch userId from localStorage
-    const storedUserId = localStorage.getItem("userId");
-    if (storedUserId) {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        userId: parseInt(storedUserId, 10),
-      }));
-    }
-  }, []);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -53,10 +42,14 @@ const DonorRegistration = () => {
 
     // Dispatch the action to register the donor
     dispatch(registerDonor(formData));
-
-    // Navigate to confirmation or dashboard page
-    navigate("/");
   };
+
+  useEffect(() => {
+    if (donor) {
+      // If donor is successfully registered, navigate to the dashboard or home page
+      navigate("/");
+    }
+  }, [donor, navigate]);
 
   return (
     <div className="flex items-center justify-center h-screen bg-rose-200">
@@ -176,8 +169,14 @@ const DonorRegistration = () => {
             type="submit"
             className="w-full bg-rose-700 hover:bg-rose-800 text-white py-2 px-4 rounded-md mt-6 col-span-3"
           >
-            Register
+            {loading ? "Registering..." : "Register"}
           </button>
+
+          {error && (
+            <div className="mt-4 text-red-500">
+              <p>{error}</p>
+            </div>
+          )}
         </form>
       </div>
     </div>

@@ -1,6 +1,9 @@
 import React from 'react';
+import { Link} from 'react-router-dom'; // Import Link and useHistory for routing
 
 const UserHeader = () => {
+  
+
   return (
     <header className="flex items-center justify-between px-8 py-4 bg-white shadow-md">
       {/* Logo */}
@@ -15,25 +18,28 @@ const UserHeader = () => {
 
       {/* Navigation Links */}
       <nav className="flex items-center space-x-8 text-sm">
-        <a href="#nearby-hospitals" className="text-red-600 hover:underline">
+        <Link to="#nearby-hospitals" className="text-red-600 hover:underline">
           VIEW PULSE VERIFIED HOSPITALS
-        </a>
-        <a href="#donate" className="text-red-600 hover:underline">
+        </Link>
+        <Link to='/donate' className="text-red-600 hover:underline">
           DONATE
-        </a>
-        <a href="#request-blood" className="text-red-600 hover:underline">
+        </Link>
+        <Link to="/request-blood" className="text-red-600 hover:underline">
           REQUEST BLOOD
-        </a>
-        <a href="#give-rating" className="text-gray-700 hover:underline">
+        </Link>
+        <Link to="/give-rating" className="text-gray-700 hover:underline">
           Give Rating
-        </a>
-        <a href="#edit-profile" className="text-gray-700 hover:underline">
+        </Link>
+        <Link to="/edit-profile" className="text-gray-700 hover:underline">
           Edit Profile
-        </a>
+        </Link>
       </nav>
 
       {/* Logout Button */}
-      <button className="px-4 py-2 text-white bg-red-700 rounded-md hover:bg-red-800">
+      <button 
+       // onClick={handleLogout} 
+        className="px-4 py-2 text-white bg-red-700 rounded-md hover:bg-red-800"
+      >
         Logout
       </button>
     </header>

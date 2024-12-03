@@ -1,4 +1,3 @@
-// src/features/donorSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
@@ -8,7 +7,7 @@ export const registerDonor = createAsyncThunk(
   async (donorData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        'https://2112-103-207-87-227.ngrok-free.app/api/auth/registerAsPatient',
+        'http://localhost:5000/donors', // Update to point to json-server endpoint
         donorData
       );
       console.log(response.data);

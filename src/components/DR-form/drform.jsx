@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { registerDonor } from "../../features/DonorSlice";
@@ -7,12 +7,12 @@ const DonorRegistration = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
-  const { userId, username } = location.state || {};
-  console.log(userId);
 
+  // Retrieve data passed via navigation or localStorage
+  const { username } = location.state || {};
+  
   const [formData, setFormData] = useState({
-    userId: userId || 0,
+    userId: 0, // Will be updated after fetching from localStorage
     roleId: 2,
     fullName: username || "",
     phoneNumber: "",
@@ -26,6 +26,18 @@ const DonorRegistration = () => {
     bloodGroupId: 0,
     email: "",
   });
+
+  useEffect(() => {
+    // Fetch userId from localStorage
+    const storedUserId = localStorage.getItem("userId");
+    if (storedUserId) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        userId: parseInt(storedUserId, 10),
+      }));
+    }
+  }, []);
+
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });

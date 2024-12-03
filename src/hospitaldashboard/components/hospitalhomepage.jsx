@@ -7,8 +7,10 @@ const HospitalInfo = () => {
   const dispatch = useDispatch();
   const location = useLocation(); // Access the location object to retrieve passed state
   const { hospitalId } = location.state || {}; // Get the hospitalId from the passed state
-  
+   console.log(hospitalId)  
+  // Fetch hospital information from Redux
   const { data: hospitalInfo, loading, error } = useSelector(selectHospitalInfo);
+
 
   useEffect(() => {
     if (hospitalId) {

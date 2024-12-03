@@ -2,20 +2,20 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // Replace with your actual backend URL
-const BACKEND_URL = "https://3018-2400-adc5-43c-4600-507e-c44-a623-bf6.ngrok-free.app/api/hospital";
+const BACKEND_URL = "https://2112-103-207-87-227.ngrok-free.app/api/hospital";
 
-// Update the thunk to accept hospitalId directly
+// Thunk to fetch hospital information based on hospitalId
 export const fetchHospitalInfo = createAsyncThunk(
   "hospitalInfo/fetchHospitalInfo",
   async (hospitalId, thunkAPI) => {
     try {
-      console.log(hospitalId);
+      console.log("Fetching hospital info for hospitalId:", hospitalId);
       if (!hospitalId) {
         throw new Error("Hospital ID is required");
       }
       const response = await axios.get(`${BACKEND_URL}/get?hospitalId=${hospitalId}`);
       console.log("API Response:", response.data); // Log response for debugging
-      return response.data;
+      return response.data; // Return the hospital data
     } catch (error) {
       console.error("Error fetching hospital info:", error); // Log error for debugging
       return thunkAPI.rejectWithValue(
@@ -39,15 +39,15 @@ const hospitalInfoSlice = createSlice({
     builder
       .addCase(fetchHospitalInfo.pending, (state) => {
         state.loading = true;
-        state.error = null;
+        state.error = null; // Reset error on new request
       })
       .addCase(fetchHospitalInfo.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = action.payload; // Ensure payload contains all the necessary fields
+        state.data = action.payload; // Store fetched data
       })
       .addCase(fetchHospitalInfo.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload; // Store error message
       });
   },
 });

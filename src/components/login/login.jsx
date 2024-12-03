@@ -1,48 +1,45 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { login, clearState } from "../../features/authSlice"; // Adjust the path based on your project structure
+import { login, clearState } from "../../features/authSlice";
 
 const Login = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // For navigating after successful login
-  const { isLoading, error, success, user, roleId, hospitalId, patientId } = useSelector((state) => state.auth); // Access user, roleId, hospitalId, and patientId from auth
+  const navigate = useNavigate();
 
-  const [UsernameOrEmail, setUsernameOrEmail] = useState(""); // Match field name
+  const { isLoading, error, success, token, roleId, hospitalId, patientId } = useSelector(
+    (state) => state.auth
+  );
+
+  const [UsernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = (e) => {
     e.preventDefault();
-    dispatch(login({ UsernameOrEmail, password })); // No need to pass role, it will be handled in the backend
+    dispatch(login({ UsernameOrEmail, password }));
   };
 
-  // Reset state and navigate on successful login
+  // Redirect after successful login
   useEffect(() => {
-    if (success) {
-      // Redirect based on the roleId (roleId should be set in the response)
+    if (success && token) {
+      // Navigate based on the roleId
       if (roleId === 1) {
-        // Pass both hospitalId and patientId as state for hospital
         navigate("/hospital-dashboard", { state: { hospitalId, patientId } });
       } else if (roleId === 2) {
-        // Pass both hospitalId and patientId as state for donor
         navigate("/donor-dashboard", { state: { hospitalId, patientId } });
       } else {
-        navigate("/"); // Default route if role is not recognized
+        navigate("/"); // Fallback route
       }
       dispatch(clearState()); // Clear success and error states
     }
-  }, [success, roleId, hospitalId, patientId, dispatch, navigate]);
+  }, [success, token, roleId, hospitalId, patientId, navigate, dispatch]);
 
   return (
     <div className="bg-red-100 min-h-screen flex flex-col">
-      {/* Login Form */}
       <main className="flex-grow flex items-center justify-center">
         <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-            Sign In
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Sign In</h2>
 
-          {/* Error message */}
           {error && (
             <div className="bg-red-200 text-red-800 text-sm p-2 rounded mb-4">
               {error}
@@ -96,7 +93,7 @@ const Login = () => {
 
           <div className="mt-4 text-center">
             <Link
-              to="/forgot-password" // Replace with the actual route for forgot password
+              to="/forgot-password"
               className="text-sm text-gray-600 hover:text-red-500"
             >
               Forgot password?
@@ -106,7 +103,7 @@ const Login = () => {
           <div className="mt-6 text-center text-sm text-gray-600">
             Don't have an account?{" "}
             <Link
-              to="/signup" // Replace with the actual route for sign up
+              to="/signup"
               className="text-red-500 hover:text-red-700 font-medium"
             >
               Sign up

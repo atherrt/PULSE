@@ -16,8 +16,14 @@ export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI
     console.log("Response data:", response.data); // Log the full response to inspect the structure
 
     // Destructure the necessary data from the response
-    const { userId, roleId, email, token } = response.data.response || {}; // Access data from 'data' field in response
+    const { userId, roleId, email, token } = response.data.response || {};
+    
+    // Access data from 'data' field in response
 
+    // const { data } = response.response.data || {};
+    // const { userId, roleId, email, token } = data || {};
+
+    console.log(email);
     // If token is present, save it in localStorage
     if (token) {
       localStorage.setItem('token', token);

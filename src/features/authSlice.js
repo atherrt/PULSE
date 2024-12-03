@@ -23,22 +23,16 @@ export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI
     console.log("Response data:", response.data); // Log the full response to inspect the structure
 
     // Destructure the necessary data from the response
-    const { hospitalId, patientId } = response.data.data;
-    const { userId, roleId, email, token } = response.data.data.response || {};
-   console.log(hospitalId);
-    if (hospitalId) {
-      localStorage.setItem('hospitalId', hospitalId); // Save hospitalId to localStorage
-    }
-    if (patientId) {
-      localStorage.setItem('patientId', patientId); // Save patientId to localStorage
-    }
+    const { userId, roleId, email, token } = response.data.response || {}; // Access data from 'data' field in response
+
+    // If token is present, save it in localStorage
     if (token) {
       localStorage.setItem('token', token);
       localStorage.setItem('roleId', roleId);
       localStorage.setItem('userId', userId);
     }
 
-    return { userId, roleId, email, token, hospitalId, patientId }; // Return all required data
+    return { userId, roleId, email, token }; // Return the required data
   } catch (error) {
     console.error("Login error:", error.response?.data || error.message);
     return thunkAPI.rejectWithValue(error.response?.data || 'An error occurred');
